@@ -51,7 +51,7 @@
                     </button>
                     <ul class="dropdown-menu dm-center flex-column justify-content-center shadow border-0" aria-labelledby="btn-mode-weekly-mobile">
                         <?php 
-                        $days = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
+                        $days = array_keys($weeklyMenus);
                         foreach ($days as $day): 
                         ?>
                             <li>
