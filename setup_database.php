@@ -1,66 +1,93 @@
-<?php 
-    if (php_sapi_name() !== 'cli') {
-        http_response_code(403);
-        
-        die("Akses ditolak! Setup database hanya boleh dijalankan melalui Command Line/Terminal.");
+<?php
+if (php_sapi_name() !== 'cli') {
+    http_response_code(403);
+    die("Akses ditolak! Setup database hanya boleh dijalankan melalui Command Line/Terminal.");
+}
+
+date_default_timezone_set('Asia/Jakarta');
+require_once __DIR__ . '/config/database.php';
+
+$config = getDBConfig();
+
+try {
+    $dsn = sprintf('mysql:host=%s;port=%s;charset=%s', $config['host'], $config['port'], $config['charset']);
+    $pdo = new PDO($dsn, $config['user'], $config['pass'], [
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+    ]);
+
+    $dbName = $config['dbname'];
+    $pdo->exec("CREATE DATABASE IF NOT EXISTS `{$dbName}` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
+    $pdo->exec("USE `{$dbName}`");
+
+    echo "Database `{$dbName}` berhasil disiapkan.\n";
+
+    $sqlFilePath = __DIR__ . '/schema.sql';
+    if (file_exists($sqlFilePath)) {
+        $sql = file_get_contents($sqlFilePath);
+        $pdo->exec($sql);
+
+        $pdo->exec(
+            "ALTER TABLE orders MODIFY COLUMN status
+             ENUM('Belum Dibayar', 'Menunggu Verifikasi', 'Aktif', 'Selesai', 'Dibatalkan', 'Ditolak')
+             NOT NULL DEFAULT 'Belum Dibayar'"
+        );
+
+        echo "Seluruh tabel berhasil dibuat/diperbarui dari file schema.sql.\n";
+    } else {
+        die("Gagal: File schema.sql tidak ditemukan di " . $sqlFilePath . "\n");
     }
 
-    require_once __DIR__ . '/config/database.php';
+    // Hapus data demo jika dijalankan dengan flag --reset
+    if (in_array('--reset', $argv ?? [], true)) {
+        $pdo->exec("SET FOREIGN_KEY_CHECKS = 0");
+        $pdo->exec("TRUNCATE TABLE reviews");
+        $pdo->exec("TRUNCATE TABLE payments");
+        $pdo->exec("TRUNCATE TABLE orders");
+        $pdo->exec("TRUNCATE TABLE daily_menus");
+        $pdo->exec("TRUNCATE TABLE packages");
+        $pdo->exec("TRUNCATE TABLE menus");
+        $pdo->exec("TRUNCATE TABLE users");
+        $pdo->exec("SET FOREIGN_KEY_CHECKS = 1");
+        echo "Data lama berhasil di-reset.\n";
+    }
 
-    $config = getDBConfig();
+    // Data demo dijalankan dengan flag --demo
+    if (in_array('--demo', $argv ?? [], true)) {
+        $seedFilePath = __DIR__ . '/seed.sql';
 
-    try {
-        $dsn = sprintf('mysql:host=%s; port=%s; charset=%s', $config['host'], $config['port'], $config['charset']);
-        $pdo = new PDO($dsn, $config['user'], $config['pass'], [
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-        ]);
+        if (file_exists($seedFilePath)) {
+            $pdo->exec(file_get_contents($seedFilePath));
 
-        $dbName = $config['dbname'];
-        $pdo -> exec("CREATE DATABASE IF NOT EXISTS `{$dbName}` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
-        $pdo -> exec ("USE `{$dbName}`");
-
-        echo "Database `{$dbName}` berhasil disiapkan. \n";
-
-        $sqlFilePath = __DIR__ . '/schema.sql';
-
-        if (file_exists($sqlFilePath)) {
-            $sql = file_get_contents($sqlFilePath);
-            $pdo -> exec($sql);
-
-            echo "Seluruh tabel berhasil dibuat dari file schema.sql \n";
-        } else {
-            die("Gagal: File schema.sql tidak ditemukan di " . $sqlFilePath . "\n");
-        }
-
-         // hapus data demo dijalanin dengan flag --reset
-        if (in_array('--reset', $argv ?? [], true)) {
-            $pdo->exec(
-                "DELETE FROM daily_menus
-                 WHERE `date` BETWEEN '2026-10-19' AND '2026-11-01'
-                   AND menu_id BETWEEN 1 AND 21;
-                 DELETE FROM menus WHERE menu_id BETWEEN 1 AND 21;"
+            $startOfWeek = new DateTime('monday this week');
+            $slots = ['Pagi', 'Siang', 'Malam'];
+            $stmtSchedule = $pdo->prepare(
+                "INSERT INTO daily_menus (menu_id, `date`, slot)
+                 VALUES (:menu_id, :date, :slot)
+                 ON DUPLICATE KEY UPDATE menu_id = VALUES(menu_id)"
             );
-            echo "Data demo dihapus \n";
-        }
-
-        // data demo dijalankan dengan flag --demo
-        if (in_array('--demo', $argv ?? [], true)) {
-            $seedFilePath = __DIR__ . '/seed.sql';
-
-            if (file_exists($seedFilePath)) {
-                $pdo->exec(file_get_contents($seedFilePath));
-                echo "Data demo berhasil dimasukkan dari seed.sql \n";
-            } else {
-                die("Gagal: File seed.sql tidak ditemukan di " . $seedFilePath . "\n");
+            $menuIndex = 1;
+            for ($dayOffset = 0; $dayOffset < 14; $dayOffset++) {
+                $currDate = (clone $startOfWeek)->modify("+{$dayOffset} days")->format('Y-m-d');
+                foreach ($slots as $slot) {
+                    $stmtSchedule->execute([
+                        'menu_id' => $menuIndex,
+                        'date'    => $currDate,
+                        'slot'    => $slot,
+                    ]);
+                    $menuIndex = ($menuIndex % 21) + 1;
+                }
             }
+
+            echo "Data demo berhasil dimasukkan dari seed.sql (termasuk jadwal menu minggu berjalan).\n";
         } else {
-            echo "Data demo dilewati (jalankan dengan --demo untuk mengisi data demo) \n";
+            die("Gagal: File seed.sql tidak ditemukan di " . $seedFilePath . "\n");
         }
-
-        echo "Setup database selesai \n";
-
-    } catch (PDOException $e) {
-        http_response_code(500);
-        die("Gagal melakukan setup database: " . $e -> getMessage() . "\n");
+    } else {
+        echo "Data demo dilewati (jalankan dengan --demo untuk mengisi data demo).\n";
     }
-?>
+
+    echo "Setup database selesai.\n";
+} catch (PDOException $e) {
+    http_response_code(500);
+    die("Gagal melakukan setup database: " . $e->getMessage() . "\n");
+}

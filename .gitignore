@@ -9,6 +9,7 @@ config/credentials.*
 .phpunit.result.cache
 .phpunit.cache/
 /build/
+/docs/
 
 .php_cs.cache
 .php-cs-fixer.cache

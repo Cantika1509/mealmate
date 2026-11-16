@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS orders (
     delivery_address TEXT NOT NULL,
     notes TEXT,
     total_price INT NOT NULL,
-    status ENUM('Menunggu Verifikasi', 'Aktif', 'Selesai', 'Dibatalkan', 'Ditolak') NOT NULL DEFAULT 'Menunggu Verifikasi',
+    status ENUM('Belum Dibayar', 'Menunggu Verifikasi', 'Aktif', 'Selesai', 'Dibatalkan', 'Ditolak') NOT NULL DEFAULT 'Belum Dibayar',
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (package_id) REFERENCES packages(package_id) ON DELETE CASCADE ON UPDATE CASCADE

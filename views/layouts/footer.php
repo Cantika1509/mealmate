@@ -10,21 +10,21 @@
             <div class="menu-footer-container d-grid d-md-flex justify-content-md-start">
                 <div class="menu-footer">
                     <h5 class="mb-3">Menu</h5>
-                    <p>Menu Hari Ini</p>
-                    <p>Menu Mingguan</p>
-                    <p>Paket Langganan</p>
+                    <p><a href="index.php?page=menu" class="text-decoration-none">Menu Hari Ini</a></p>
+                    <p><a href="index.php?page=menu" class="text-decoration-none">Menu Mingguan</a></p>
+                    <p><a href="index.php?page=menu#packages-section" class="text-decoration-none">Paket Langganan</a></p>
                 </div>
 
                 <div class="about-menu-footer">
                     <h5 class="mb-3">Tentang Kami</h5>
-                    <p>Tentang MealMate</p>
-                    <p>Cara Pemesanan</p>
+                    <p><a href="index.php?page=about" class="text-decoration-none">Tentang MealMate</a></p>
+                    <p><a href="index.php?page=home#home-order-steps" class="text-decoration-none">Cara Pemesanan</a></p>
                 </div>
 
                 <div class="help-menu-footer">
                     <h5 class="mb-3">Bantuan</h5>
-                    <p>FAQ</p>
-                    <p>Kontak Kami</p>
+                    <p><a href="index.php?page=faq" class="text-decoration-none">FAQ</a></p>
+                    <p><a href="index.php?page=about" class="text-decoration-none">Kontak Kami</a></p>
                 </div>
             </div>
 
@@ -39,9 +39,8 @@
         </div>
 
         <div class="copyright-section d-flex flex-column flex-md-row justify-content-between align-items-center gap-2 text-center">
-            <!-- TODO Change Year 2026 use JS so it render current year dynamically -->
             <div>
-                <i class="bi bi-c-circle"></i> 2026 MealMate. Semua hak dilindungi. 
+                <i class="bi bi-c-circle"></i> <?= date('Y') ?> MealMate. Semua hak dilindungi.
             </div>
             <div class="copyright-slogan d-flex align-items-center gap-2">
                 <i class="bi bi-leaf"></i>
@@ -52,6 +51,6 @@
 </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="/assets/js/menu-toggle.js"></script>
+    <script src="./assets/js/menu-toggle.js"></script>
 </body>
 </html>

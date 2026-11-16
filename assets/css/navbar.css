@@ -66,6 +66,19 @@
     border-radius: 12px;
 }
 
+.order-nav:hover {
+    color: white;
+    background-color: #c96830;
+}
+
+.user-avatar-sm {
+    width: 34px;
+    height: 34px;
+    background-color: #E4EEDD;
+    color: #13523C;
+    font-size: 16px;
+}
+
 /* Login button border untuk di hover */
 .login-nav::before,
 .login-nav::after {

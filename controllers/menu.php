@@ -1,57 +1,37 @@
 <?php
+date_default_timezone_set('Asia/Jakarta');
 
-    date_default_timezone_set('Asia/Jakarta');
+require_once __DIR__ . '/../models/MenuModel.php';
 
-    require_once __DIR__ . '/../config/database.php';
-    require_once __DIR__ . '/../models/MenuModel.php';
+$hariIndo  = ['Sunday' => 'Minggu', 'Monday' => 'Senin', 'Tuesday' => 'Selasa', 'Wednesday' => 'Rabu', 'Thursday' => 'Kamis', 'Friday' => 'Jumat', 'Saturday' => 'Sabtu'];
+$bulanIndo = [1 => 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
 
-    // mapping ke dalam bahasa indo
-    $hariIndo  = ['Sunday' => 'Minggu', 'Monday' => 'Senin', 'Tuesday' => 'Selasa', 'Wednesday' => 'Rabu', 'Thursday' => 'Kamis', 'Friday' => 'Jumat', 'Saturday' => 'Sabtu'];
-    $bulanIndo = [1 => 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+$formatTanggalIndo = static function (DateTimeInterface $dt, string $namaHari) use ($bulanIndo): string {
+    return sprintf('%s, %d %s %s', $namaHari, (int) $dt->format('j'), $bulanIndo[(int) $dt->format('n')], $dt->format('Y'));
+};
 
-    // tgl hari ini
-    $hari  = $hariIndo[date('l')];
-    $tgl   = date('d');
-    $bulan = $bulanIndo[(int)date('n')];
-    $tahun = date('Y');
-    $tanggalHariIni = "{$hari}, {$tgl} {$bulan} {$tahun}";
+$now = new DateTimeImmutable('today');
+$tanggalHariIni = $formatTanggalIndo($now, $hariIndo[$now->format('l')]);
+$dailyMenus     = getMenuByDate($now->format('Y-m-d'));
 
-     // menu hari ini (dari database)
-    $dailyMenus = getMenuByDate(date('Y-m-d'));
+$startOfWeek = new DateTimeImmutable('monday this week');
+$endOfWeek   = $startOfWeek->modify('+6 days');
+$menusByDate = getMenuByDateRange($startOfWeek->format('Y-m-d'), $endOfWeek->format('Y-m-d'));
 
-    // logika untuk ngambil tanggal dalam 1 minggu
-    $weeklyMenus = [];
-    $startOfWeek = new DateTime('monday this week'); // dapat tanggal hari senin-minggu
-    $endOfWeek   = (clone $startOfWeek)->modify('+6 days');
+$listHari    = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
+$weeklyMenus = [];
 
-    // ambil jadwal 1 minggu sekaligus (1 query), dikelompokkan per tanggal
-    $menusByDate = getMenuByDateRange(
-        $startOfWeek->format('Y-m-d'),
-        $endOfWeek->format('Y-m-d')
-    );
+foreach ($listHari as $index => $namaHari) {
+    $dateCurrent = $startOfWeek->modify("+{$index} days");
+    $weeklyMenus[$namaHari] = [
+        'tanggal' => $formatTanggalIndo($dateCurrent, $namaHari),
+        'menus'   => $menusByDate[$dateCurrent->format('Y-m-d')] ?? [],
+    ];
+}
 
-    $listHari = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
-
-    foreach ($listHari as $index => $namaHari) {
-        $dateCurrent = clone $startOfWeek;
-        $dateCurrent->modify("+{$index} days");
-
-        $tglAngka  = $dateCurrent->format('j');
-        $blnAngka  = (int)$dateCurrent->format('n');
-        $tahunAngka = $dateCurrent->format('Y');
-
-        $tglFormatted = "{$namaHari}, {$tglAngka} {$bulanIndo[$blnAngka]} {$tahunAngka}";
-
-        $weeklyMenus[$namaHari] = [
-            'tanggal' => $tglFormatted,
-            'menus'   => $menusByDate[$dateCurrent->format('Y-m-d')] ?? []
-        ];
-    }
-
-    // render ke view
-    render("customer/menu", [
-        'title'          => 'Menu',
-        'tanggalHariIni' => $tanggalHariIni,
-        'dailyMenus'     => $dailyMenus,
-        'weeklyMenus'    => $weeklyMenus
-    ]);
+render('customer/menu', [
+    'title'          => 'Menu',
+    'tanggalHariIni' => $tanggalHariIni,
+    'dailyMenus'     => $dailyMenus,
+    'weeklyMenus'    => $weeklyMenus,
+]);
