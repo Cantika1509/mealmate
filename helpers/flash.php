@@ -2,7 +2,7 @@
 
 function setFlash(string $type, string $message): void {
     $_SESSION['flash'] = [
-        'type'    => $type,
+        'type' => $type,
         'message' => $message,
     ];
 }

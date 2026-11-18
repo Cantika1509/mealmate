@@ -5,7 +5,7 @@ const SESSION_TIMEOUT_SECONDS = 1800;
 
 function initSession(): void {
     if (session_status() === PHP_SESSION_NONE) {
-        session_start();
+        session_start(['cookie_samesite' => 'Lax', 'cookie_httponly' => true]);
     }
 
     if (isset($_SESSION['user_id'], $_SESSION['last_activity'])) {
@@ -33,9 +33,9 @@ function currentUser(): ?array {
     }
     return [
         'user_id' => (int) $_SESSION['user_id'],
-        'name'    => (string) ($_SESSION['name'] ?? ''),
-        'email'   => (string) ($_SESSION['email'] ?? ''),
-        'role'    => (string) ($_SESSION['role'] ?? 'Pelanggan'),
+        'name' => (string) ($_SESSION['name'] ?? ''),
+        'email' => (string) ($_SESSION['email'] ?? ''),
+        'role' => (string) ($_SESSION['role'] ?? 'Pelanggan'),
     ];
 }
 
