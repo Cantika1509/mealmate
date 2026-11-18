@@ -36,7 +36,7 @@ if ($method === 'POST') {
         $imageName = $existingMenu['image'] ?? null;
         $hasFile = isset($_FILES['image']['error']) && $_FILES['image']['error'] !== UPLOAD_ERR_NO_FILE;
 
-        if ($hasFile) {
+        if ($hasFile && empty($errors)) {
             $upload = validateAndUploadImage($_FILES['image'], __DIR__ . '/../assets/img', 'menu_');
             if (!$upload['ok']) {
                 $errors['image'] = $upload['error'];

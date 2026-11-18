@@ -5,7 +5,7 @@ const SESSION_TIMEOUT_SECONDS = 1800;
 
 function initSession(): void {
     if (session_status() === PHP_SESSION_NONE) {
-        session_start();
+        session_start(['cookie_samesite' => 'Lax', 'cookie_httponly' => true]);
     }
 
     if (isset($_SESSION['user_id'], $_SESSION['last_activity'])) {

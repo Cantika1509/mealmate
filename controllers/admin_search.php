@@ -58,6 +58,7 @@ if (!empty($packages)) {
 }
 
 $cleanOrderQ = ltrim($q, '#ORDordMm-0');
+$exactOrderId = ctype_digit($cleanOrderQ) && $cleanOrderQ !== '' ? (int) $cleanOrderQ : -1;
 $orderIdLike = '%' . ($cleanOrderQ !== '' ? $cleanOrderQ : $q) . '%';
 $stmtOrd = $pdo->prepare(
     "SELECT o.order_id, u.name AS customer_name, p.package_name, o.status
@@ -67,9 +68,9 @@ $stmtOrd = $pdo->prepare(
      WHERE CAST(o.order_id AS CHAR) LIKE :q1
         OR u.name LIKE :q2
         OR p.package_name LIKE :q3
-     ORDER BY o.order_id DESC LIMIT 4"
+     ORDER BY (o.order_id = :exact_id) DESC, o.order_id DESC LIMIT 4"
 );
-$stmtOrd->execute(['q1' => $orderIdLike, 'q2' => $like, 'q3' => $like]);
+$stmtOrd->execute(['q1' => $orderIdLike, 'q2' => $like, 'q3' => $like, 'exact_id' => $exactOrderId]);
 $orders = $stmtOrd->fetchAll();
 if (!empty($orders)) {
     $items = [];

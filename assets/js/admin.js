@@ -3,6 +3,8 @@ function openMenuModal(mode, id = 0, name = '', desc = '') {
     document.getElementById('menuFormId').value = id;
     document.getElementById('menu_name').value = name;
     document.getElementById('description').value = desc;
+    var imgInput = document.getElementById('image');
+    if (imgInput) imgInput.value = '';
     document.getElementById('menuFormTitle').textContent = mode === 'update' ? 'Ubah Data Menu' : 'Tambah Menu Baru';
     new bootstrap.Modal(document.getElementById('menuFormModal')).show();
 }
@@ -82,6 +84,7 @@ window.addEventListener('DOMContentLoaded', function () {
     if (!input || !dropdown || !container) return;
 
     var timer = null;
+    var activeReqId = 0;
 
     function escapeHtml(str) {
         var div = document.createElement('div');
@@ -117,6 +120,7 @@ window.addEventListener('DOMContentLoaded', function () {
 
     input.addEventListener('input', function () {
         clearTimeout(timer);
+        var currentReq = ++activeReqId;
         var q = input.value.trim();
         if (q.length < 1) {
             dropdown.classList.add('d-none');
@@ -127,8 +131,14 @@ window.addEventListener('DOMContentLoaded', function () {
         timer = setTimeout(function () {
             fetch('index.php?page=admin-search&q=' + encodeURIComponent(q))
                 .then(function (res) { return res.json(); })
-                .then(function (data) { renderResults(data.groups || [], q); })
-                .catch(function () { dropdown.classList.add('d-none'); });
+                .then(function (data) {
+                    if (currentReq !== activeReqId) return;
+                    renderResults(data.groups || [], q);
+                })
+                .catch(function () {
+                    if (currentReq !== activeReqId) return;
+                    dropdown.classList.add('d-none');
+                });
         }, 200);
     });
 

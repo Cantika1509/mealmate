@@ -40,15 +40,20 @@ if ($method === 'POST') {
             ]);
         }
 
-        if ($origDate !== '' && $origSlot !== '' && ($origDate !== $date || $origSlot !== $slot)) {
-            if (isScheduleInActiveOrders($origDate, $origSlot)) {
-                setFlash('danger', 'Jadwal lama tidak dapat diubah tanggal/slot-nya karena terkait pesanan langganan aktif.');
-                redirect('index.php?page=admin-schedules');
-            }
-            deleteDailyMenu($origDate, $origSlot);
+        $isMoved = $origDate !== '' && $origSlot !== '' && ($origDate !== $date || $origSlot !== $slot);
+        if ($isMoved && isScheduleInActiveOrders($origDate, $origSlot)) {
+            setFlash('danger', 'Jadwal lama tidak dapat diubah tanggal/slot-nya karena terkait pesanan langganan aktif.');
+            redirect('index.php?page=admin-schedules');
         }
 
+        $pdo = getDBConnection();
+        $pdo->beginTransaction();
+        if ($isMoved) {
+            deleteDailyMenu($origDate, $origSlot);
+        }
         setDailyMenu($menuId, $date, $slot);
+        $pdo->commit();
+
         setFlash('success', 'Jadwal menu berhasil disimpan.');
         redirect('index.php?page=admin-schedules');
     }
