@@ -36,6 +36,7 @@ $routeMap = [
     'admin-customers' => './controllers/admin_customers.php',
     'admin-reports' => './controllers/admin_reports.php',
     'admin-reviews' => './controllers/admin_reviews.php',
+    'admin-search' => './controllers/admin_search.php',
 ];
 
 if (isset($routeMap[$page]) && file_exists($routeMap[$page])) {

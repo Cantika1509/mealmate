@@ -33,9 +33,9 @@ function currentUser(): ?array {
     }
     return [
         'user_id' => (int) $_SESSION['user_id'],
-        'name'    => (string) ($_SESSION['name'] ?? ''),
-        'email'   => (string) ($_SESSION['email'] ?? ''),
-        'role'    => (string) ($_SESSION['role'] ?? 'Pelanggan'),
+        'name' => (string) ($_SESSION['name'] ?? ''),
+        'email' => (string) ($_SESSION['email'] ?? ''),
+        'role' => (string) ($_SESSION['role'] ?? 'Pelanggan'),
     ];
 }
 

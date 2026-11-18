@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . '/../models/UserModel.php';
 
-$page   = $_GET['page'] ?? 'login';
+$page = $_GET['page'] ?? 'login';
 $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
 
 switch ($page) {
@@ -9,9 +9,9 @@ switch ($page) {
         requireGuest();
 
         if ($method === 'POST') {
-            $email    = trim($_POST['email'] ?? '');
+            $email = trim($_POST['email'] ?? '');
             $password = $_POST['password'] ?? '';
-            $errors   = [];
+            $errors = [];
 
             if ($email === '') {
                 $errors['email'] = 'Email wajib diisi.';
@@ -29,10 +29,10 @@ switch ($page) {
             }
 
             session_regenerate_id(true);
-            $_SESSION['user_id']       = (int) $user['user_id'];
-            $_SESSION['name']          = $user['name'];
-            $_SESSION['email']         = $user['email'];
-            $_SESSION['role']          = $user['role'];
+            $_SESSION['user_id'] = (int) $user['user_id'];
+            $_SESSION['name'] = $user['name'];
+            $_SESSION['email'] = $user['email'];
+            $_SESSION['role'] = $user['role'];
             $_SESSION['last_activity'] = time();
 
             $redirectUrl = ($user['role'] === 'Admin')
@@ -43,9 +43,9 @@ switch ($page) {
         }
 
         render('auth/login', [
-            'title'  => 'Login - MealMate',
+            'title' => 'Login - MealMate',
             'errors' => getValidationErrors(),
-            'old'    => getOldInput(),
+            'old' => getOldInput(),
         ], 'auth');
         break;
 
@@ -53,11 +53,11 @@ switch ($page) {
         requireGuest();
 
         if ($method === 'POST') {
-            $name     = trim($_POST['name'] ?? '');
-            $email    = trim($_POST['email'] ?? '');
-            $phone    = trim($_POST['phone_number'] ?? '');
+            $name = trim($_POST['name'] ?? '');
+            $email = trim($_POST['email'] ?? '');
+            $phone = trim($_POST['phone_number'] ?? '');
             $password = $_POST['password'] ?? '';
-            $errors   = [];
+            $errors = [];
 
             if ($name === '') {
                 $errors['name'] = 'Nama lengkap wajib diisi.';
@@ -87,8 +87,8 @@ switch ($page) {
 
             if (!empty($errors)) {
                 redirectWithErrors('index.php?page=signup', $errors, [
-                    'name'         => $name,
-                    'email'        => $email,
+                    'name' => $name,
+                    'email' => $email,
                     'phone_number' => $phone,
                 ]);
             }
@@ -99,9 +99,9 @@ switch ($page) {
         }
 
         render('auth/signup', [
-            'title'  => 'Daftar Akun - MealMate',
+            'title' => 'Daftar Akun - MealMate',
             'errors' => getValidationErrors(),
-            'old'    => getOldInput(),
+            'old' => getOldInput(),
         ], 'auth');
         break;
 
@@ -116,7 +116,7 @@ switch ($page) {
         requireGuest();
 
         if ($method === 'POST') {
-            $email  = trim($_POST['email'] ?? '');
+            $email = trim($_POST['email'] ?? '');
             $errors = [];
 
             if ($email === '') {
@@ -137,8 +137,8 @@ switch ($page) {
             $token = bin2hex(random_bytes(16));
             $_SESSION['password_reset'] = [
                 'user_id' => (int) $user['user_id'],
-                'email'   => $user['email'],
-                'token'   => $token,
+                'email' => $user['email'],
+                'token' => $token,
                 'expires' => time() + 900, // 15 menit
             ];
 
@@ -146,9 +146,9 @@ switch ($page) {
         }
 
         render('auth/forgot_password', [
-            'title'  => 'Reset Password - MealMate',
+            'title' => 'Reset Password - MealMate',
             'errors' => getValidationErrors(),
-            'old'    => getOldInput(),
+            'old' => getOldInput(),
         ], 'auth');
         break;
 
@@ -156,7 +156,7 @@ switch ($page) {
     case 'reset-password':
         requireGuest();
 
-        $token        = $_GET['token'] ?? ($_POST['token'] ?? '');
+        $token = $_GET['token'] ?? ($_POST['token'] ?? '');
         $resetSession = $_SESSION['password_reset'] ?? null;
 
         if (
@@ -171,9 +171,9 @@ switch ($page) {
         }
 
         if ($method === 'POST') {
-            $password        = $_POST['password'] ?? '';
+            $password = $_POST['password'] ?? '';
             $confirmPassword = $_POST['confirm_password'] ?? '';
-            $errors          = [];
+            $errors = [];
 
             $user = findUserById((int) $resetSession['user_id']);
             if (!$user) {
@@ -207,9 +207,9 @@ switch ($page) {
         }
 
         render('auth/reset_password', [
-            'title'  => 'Buat Kata Sandi Baru - MealMate',
-            'token'  => $token,
-            'email'  => $resetSession['email'],
+            'title' => 'Buat Kata Sandi Baru - MealMate',
+            'token' => $token,
+            'email' => $resetSession['email'],
             'errors' => getValidationErrors(),
         ], 'auth');
         break;

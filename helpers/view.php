@@ -31,8 +31,8 @@ function renderFlash(?array $flash, string $extraClass = ''): string {
         return '';
     }
     $type = htmlspecialchars($flash['type']);
-    $msg  = htmlspecialchars($flash['message']);
-    $cls  = trim("alert alert-{$type} alert-dismissible fade show rounded-3 {$extraClass}");
+    $msg = htmlspecialchars($flash['message']);
+    $cls = trim("alert alert-{$type} alert-dismissible fade show rounded-3 {$extraClass}");
     return "<div class=\"{$cls}\" role=\"alert\">{$msg}<button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"alert\" aria-label=\"Close\"></button></div>";
 }
 

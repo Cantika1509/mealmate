@@ -18,22 +18,19 @@ $currentPage = $_GET['page'] ?? 'admin-dashboard';
 </head>
 <body class="admin-body">
     <div class="admin-layout d-flex min-vh-100 w-100">
-        <!-- Sidebar -->
         <?php include __DIR__ . '/admin_sidebar.php'; ?>
 
-        <!-- Main Content Wrapper -->
         <div class="admin-main flex-grow-1 d-flex flex-column min-w-0">
-            <!-- Topbar -->
             <header class="admin-topbar d-flex align-items-center justify-content-between px-4 py-3">
                 <div class="d-flex align-items-center gap-3 flex-grow-1">
                     <button class="btn d-lg-none border-0 p-1" type="button" data-bs-toggle="offcanvas" data-bs-target="#adminSidebarOffcanvas" aria-controls="adminSidebarOffcanvas" aria-label="Toggle Sidebar">
                         <i class="bi bi-list fs-3"></i>
                     </button>
-                    <form action="index.php" method="get" class="admin-global-search position-relative d-none d-sm-block w-100" style="max-width: 420px;">
-                        <input type="hidden" name="page" value="<?= htmlspecialchars($currentPage) ?>">
+                    <div class="admin-global-search position-relative d-none d-sm-block w-100" style="max-width: 420px;" id="adminGlobalSearchContainer">
                         <i class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"></i>
-                        <input type="text" name="q" value="<?= htmlspecialchars($_GET['q'] ?? '') ?>" class="form-control ps-5 rounded-3 border-0 shadow-xs" placeholder="Cari menu, paket, atau pesanan...">
-                    </form>
+                        <input type="search" id="adminGlobalSearchInput" class="form-control ps-5 rounded-3 border-0 shadow-xs" placeholder="Cari menu, paket, atau pesanan..." autocomplete="off">
+                        <div id="adminGlobalSearchDropdown" class="admin-search-dropdown d-none"></div>
+                    </div>
                 </div>
 
                 <div class="dropdown">
@@ -63,6 +60,5 @@ $currentPage = $_GET['page'] ?? 'admin-dashboard';
                 </div>
             </header>
 
-            <!-- Content Area -->
             <main class="admin-content px-4 pb-5 pt-2 flex-grow-1">
                 <?= renderFlash($flash, 'shadow-sm mb-4') ?>

@@ -71,8 +71,8 @@ try {
                 foreach ($slots as $slot) {
                     $stmtSchedule->execute([
                         'menu_id' => $menuIndex,
-                        'date'    => $currDate,
-                        'slot'    => $slot,
+                        'date' => $currDate,
+                        'slot' => $slot,
                     ]);
                     $menuIndex = ($menuIndex % 21) + 1;
                 }
