@@ -88,7 +88,7 @@ $endRow = min($offset + $perPage, $totalMenus);
                 </thead>
                 <tbody>
                     <?php foreach ($menus as $menu):
-                        $hasImage = !empty($menu['image']) && is_file(__DIR__ . '/../../assets/img/' . $menu['image']);
+                        $hasImage = !empty($menu['image']) && is_file(__DIR__ . '/../../../public/assets/img/' . $menu['image']);
                     ?>
                         <tr>
                             <td>

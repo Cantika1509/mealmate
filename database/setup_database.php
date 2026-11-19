@@ -5,7 +5,7 @@ if (php_sapi_name() !== 'cli') {
 }
 
 date_default_timezone_set('Asia/Jakarta');
-require_once __DIR__ . '/config/database.php';
+require_once __DIR__ . '/../app/config/database.php';
 
 $config = getDBConfig();
 

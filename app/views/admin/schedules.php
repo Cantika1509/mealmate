@@ -49,7 +49,7 @@ $bulanSingkat = [1 => 'Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'S
                                 'Siang' => 'bi-sun',
                                 default => 'bi-moon',
                             };
-                            $hasImage = !empty($item['image']) && is_file(__DIR__ . '/../../assets/img/' . $item['image']);
+                            $hasImage = !empty($item['image']) && is_file(__DIR__ . '/../../../public/assets/img/' . $item['image']);
                         ?>
                             <tr>
                                 <td>

@@ -18,7 +18,7 @@ function getMenuByDateRange(string $startDate, string $endDate): array {
               LEFT JOIN (
                   SELECT menu_id,
                          ROUND(AVG(rating) * 2) / 2 AS rating,
-                         COUNT(*)                   AS reviews
+                         COUNT(*) AS reviews
                   FROM reviews
                   GROUP BY menu_id
               ) rv ON rv.menu_id = m.menu_id
