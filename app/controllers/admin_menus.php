@@ -37,7 +37,7 @@ if ($method === 'POST') {
         $hasFile = isset($_FILES['image']['error']) && $_FILES['image']['error'] !== UPLOAD_ERR_NO_FILE;
 
         if ($hasFile && empty($errors)) {
-            $upload = validateAndUploadImage($_FILES['image'], __DIR__ . '/../assets/img', 'menu_');
+            $upload = validateAndUploadImage($_FILES['image'], __DIR__ . '/../../public/assets/img', 'menu_');
             if (!$upload['ok']) {
                 $errors['image'] = $upload['error'];
             } else {
