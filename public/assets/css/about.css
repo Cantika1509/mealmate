@@ -1,0 +1,234 @@
+/* -hero-about- */
+.hero-about {
+    background-image: url('../img/about-hero.webp');
+    background-size: cover;
+    min-height: clamp(365px, 203.6px + 20.36vw, 448px);
+    background-position: center;
+}
+
+.hero-about-content {
+    width: 1440px;
+    max-width: 90%;
+}
+
+.hero-about-content h1 {
+    font-size: clamp(1.75rem, 1.18rem + 2.42vw, 3rem);
+}
+
+.hero-about-content p {
+    max-width: 25%;
+    font-size: clamp(0.875rem, 0.82rem + 0.24vw, 1rem);
+}
+
+
+@media (max-width: 991px) {
+    .hero-about {
+        background-image:
+            linear-gradient(rgba(40, 40, 40, 0.88), rgba(40, 40, 40, 0.88)),
+            url('../img/about-hero.webp');
+        padding: 40px 0;
+    }
+
+    .hero-about-content {
+        max-width: 991px;
+        width: 90%;
+    }
+
+    .hero-about-content p {
+        max-width: 60%;
+    }
+}
+
+
+/* mission */
+.mission-container {
+    max-width: 90% !important;
+    width: 1440px !important;
+    min-height: clamp(240px, 25.91px + 21.60vw, 310px);
+}
+
+.mission-container p {
+    color: #43535A;
+    font-size: .75rem;
+}
+
+.mission-content-1 {
+    max-width: 552px;
+    width: 100%;
+    margin-right: clamp(32px, -102.63px + 13.59vw, 93px);
+}
+
+.mission-content-1 span {
+    color: #075D48;
+    font-size: .7rem;
+}
+
+.mission-content-1 h1 {
+    font-size: clamp(1rem, 1.14rem + 0.48vw, 1.5rem);
+}
+
+.mission-content-1 h1:nth-of-type(2) {
+    color: #E87922;
+}
+
+
+.mission-content-2 {
+    max-width: 528px;
+    width: 100%;
+    min-height: 130px;
+    border-left: 1px solid #DDD8C7;
+}
+
+.mission-content-2 p {
+    max-width: 341px;
+    width: 100%;
+}
+
+@media (max-width: 991px) {
+    .mission-container p {
+        text-align: justify;
+    }
+
+    .mission-content-1 {
+        max-width: 991px;
+        margin: 0;
+    }
+
+    .mission-content-1 h1 {
+        margin-right: 0;
+    }
+
+    .mission-content-2 {
+        max-width: 991px;
+        border: 0;
+        min-height: 0;
+    }
+
+    .mission-content-2 p {
+        max-width: 991px;
+        margin-top: 8px;
+    }
+}
+
+/* values */
+.values-container {
+    max-width: 1440px;
+    width: 80%;
+}
+
+.values-content-heading span {
+    font-size: .75rem
+}
+
+.values-content-heading h1 {
+    font-size: clamp(1.3rem, 1.15rem + 1.5vw, 2.5rem);
+    color: #E87922;
+}
+
+.values-content-card h5 {
+    font-size: clamp(1.125rem, 1.08rem + 0.19vw, 1.25rem);
+}
+
+.values-content-card p {
+    font-size: clamp(0.875rem, 0.83rem + 0.19vw, 1rem);
+    color: #6B5D52;
+}
+
+@media (max-width: 991px) {
+    .values-container {
+        max-width: 991px;
+        width: 95%;
+    }
+}
+
+/* story */
+.story-container {
+    max-width: 1440px;
+    width: 90%;
+}
+
+.story-content-heading span {
+    color: #075D48;
+    font-size: .75rem;
+}
+
+.story-content-heading h1 {
+    font-size: clamp(1.5rem, 1.15rem + 1.50vw, 2.5rem);
+}
+
+.story-content-heading h1:nth-of-type(2) {
+    color: #E87922;
+}
+
+.story-content-text p {
+    font-size: 0.75rem;
+    color: #43535A;
+}
+
+@media (max-width: 991px) {
+    .story-content-text p {
+        text-align: justify;
+    }
+}
+
+/* button dari https://uiverse.io/adamgiebl/new-bird-34 */
+.btn-custom-io {
+    background-color: #E87922;
+    font-size: 14px;
+    height: 2.8em;
+    padding: 0.35em 3.3em 0.35em 1.2em;
+    letter-spacing: 0.03em;
+    box-shadow: 0 4px 12px rgba(232, 121, 34, 0.25);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+@media (min-width: 768px) {
+    .btn-custom-io {
+        font-size: 16px;
+        height: 2.9em;
+        padding: 0.35em 3.5em 0.35em 1.4em;
+    }
+}
+
+.btn-custom-io:hover {
+    background-color: #d66a15;
+    color: #ffffff;
+}
+
+.btn-custom-io .icon {
+    height: calc(100% - 8px);
+    width: 2.3em;
+    right: 4px;
+    color: #E87922;
+    box-shadow: 0 2px 6px rgba(179, 86, 14, 0.25);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+@media (min-width: 768px) {
+    .btn-custom-io .icon {
+        width: 2.4em;
+    }
+}
+
+.btn-custom-io:hover .icon {
+    width: calc(100% - 8px);
+}
+
+.btn-custom-io .icon svg {
+    width: 1.1em;
+    transition: transform 0.3s ease;
+}
+
+.btn-custom-io:hover .icon svg {
+    transform: translateX(0.15em);
+}
+
+.btn-custom-io:active .icon {
+    transform: scale(0.96);
+}
+
+.story-img img {
+    max-width: 565px;
+    width: 100%;
+    min-height: 350px;
+}
