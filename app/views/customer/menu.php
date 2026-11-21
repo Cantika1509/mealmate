@@ -14,8 +14,8 @@
         </div>
     </section>
 
-    <section class="container-fluid py-5" id="daily-menus-section">
-        <div class="daily-menus align-items-center">
+    <section class="container-fluid py-5 d-flex justify-content-center" id="daily-menus-section">
+        <div class="daily-menus align-items-center d-flex flex-column">
             <!-- dmc-1 -->
             <div class="daily-menus-content dmc-1 row d-flex m-0 mb-3 p-0" id="header-container">
                 <div class="col-md d-flex flex-column align-items-md-start align-items-center mb-2 mb-md-0">
@@ -31,7 +31,7 @@
             </div>
 
             <!-- dmc-2 -->
-            <div class="daily-menus-content dmc-2 row d-flex flex-md-row align-items-center justify-content-center p-2 mb-4">
+            <div class="daily-menus-content dmc-2 row d-flex flex-md-row align-items-center justify-content-center p-2 mb-2">
                 <div class="col d-flex justify-content-center">
                     <button type="button" class="btn menu-mode-btn active p-2" id="btn-mode-daily" onclick="switchMode('daily')">
                         <i class="bi bi-calendar-week pe-2"></i>Menu Hari ini
@@ -63,7 +63,7 @@
             </div>
             
             <!-- weekly dekstop (radio) -->
-            <div id="weekly-selector-container" class="d-none my-4">
+            <div id="weekly-selector-container" class="d-none mt-3 m-0">
                 <div class="d-none d-md-flex justify-content-center gap-2 flex-wrap">
                     <?php foreach ($days as $index => $day): ?>
                         <input type="radio" class="btn-check" name="weekly-day-radio" id="day-<?= $day ?>" value="<?= $day ?>" <?= $index === 0 ? 'checked' : '' ?> onchange="selectWeeklyDay(this.value, false)">
@@ -73,12 +73,70 @@
             </div>
 
             <!-- dmc-3 atau card di render lewat js -->
-            <div class="daily-menus-content dmc-3 row g-md-5 g-4 flex-nowrap overflow-auto pb-3" id="menu-cards-container">
+            <div class="daily-menus-content dmc-3 row gap-xl-5 gap-lg-4 gap-md-3 flex-nowrap overflow-auto m-0 mt-4 p-0" id="menu-cards-container">
                 
             </div>
         </div>
     </section>
 
+    <section class="container-fluid mb-5" id="packages-section">
+        <div class="packages-wrapper">
+            <div class="packages-header d-flex align-items-end justify-content-between gap-3 mb-4 mx-4">
+                <div >
+                    <h3 class="packages-title fw-semibold m-0 mb-2 text-md-start text-center ">
+                        Pilih Paket Langganan
+                    </h3>
+                    <p class="packages-subtitle m-0 text-center text-md-start">
+                        Fleksibel dan hemat. Pilih paket katering yang paling sesuai dengan gaya hidup dan tujuan kesehatanmu.
+                    </p>
+                </div>
+
+                <div class="packages-nav d-none d-md-flex gap-2">
+                    <button type="button" class="btn-package-nav" id="package-prev" aria-label="Sebelumnya">
+                        <i class="bi bi-chevron-left"></i>
+                    </button>
+                    <button type="button" class="btn-package-nav" id="package-next" aria-label="Berikutnya">
+                        <i class="bi bi-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <?php if (empty($packages)): ?>
+                <p class="text-center text-muted py-5">Belum ada paket langganan yang tersedia.</p>
+            <?php else: ?>
+                <div class="package-track ms-md-4" id="package-track">
+                    <?php foreach ($packages as $package): ?>
+                        <div class="package-card">
+                            <div class="img-placeholder">
+                                <img src="./assets/img/<?= htmlspecialchars($package['image']) ?>"
+                                    alt="<?= htmlspecialchars($package['package_name']) ?>" loading="lazy">
+                            </div>
+                            <div class="package-info">
+                                <p><?= htmlspecialchars($package['package_name']) ?></p>
+
+                                <div class="package-duration-slot d-flex gap-2">
+                                    <p><?= (int) $package['duration_days'] ?> hari</p>
+                                    <p>|</p>
+                                    <p><?= htmlspecialchars(str_replace('-', ' - ', $package['applicable_days'])) ?></p>
+                                </div>
+
+                                <p><?= htmlspecialchars($package['description']) ?></p>
+
+                                <div class="package-price">
+                                    <p>Mulai dari</p>
+                                    <p><?= formatRupiah((int) $package['price']) ?> <span>/ paket</span></p>
+                                </div>
+
+                                <a href="index.php?page=checkout&package_id=<?= (int) $package['package_id'] ?>" class="btn">
+                                    Pilih Paket
+                                </a>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
+        </div>
+    </section>
 
 <!-- Mengirim variabel dari render ke JS -->
     <script>
