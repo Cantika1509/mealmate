@@ -2,6 +2,7 @@
 date_default_timezone_set('Asia/Jakarta');
 
 require_once __DIR__ . '/../models/MenuModel.php';
+require_once __DIR__ . '/../models/PackageModel.php';
 
 $hariIndo = ['Sunday' => 'Minggu', 'Monday' => 'Senin', 'Tuesday' => 'Selasa', 'Wednesday' => 'Rabu', 'Thursday' => 'Kamis', 'Friday' => 'Jumat', 'Saturday' => 'Sabtu'];
 $bulanIndo = [1 => 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
@@ -29,9 +30,12 @@ foreach ($listHari as $index => $namaHari) {
     ];
 }
 
+$packages = getAllPackages();
+
 render('customer/menu', [
     'title' => 'Menu',
     'tanggalHariIni' => $tanggalHariIni,
     'dailyMenus' => $dailyMenus,
     'weeklyMenus' => $weeklyMenus,
+    'packages' => $packages,
 ]);
