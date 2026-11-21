@@ -3,12 +3,12 @@ $hariIndo = ['Sunday' => 'Minggu', 'Monday' => 'Senin', 'Tuesday' => 'Selasa', '
 $bulanSingkat = [1 => 'Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
 ?>
 
-<div class="d-flex flex-column flex-sm-row align-items-sm-center justify-content-between gap-3 mb-4">
+<div class="d-flex flex-column flex-sm-row align-items-stretch align-items-sm-center justify-content-between gap-3 mb-4">
     <div>
         <h1 class="admin-page-title mb-1">Kelola Jadwal Menu</h1>
         <p class="text-muted mb-0">Atur menu harian yang akan disajikan kepada pelanggan sesuai jadwal.</p>
     </div>
-    <button type="button" class="btn btn-mealmate-orange d-inline-flex align-items-center gap-2 align-self-start align-self-sm-auto" onclick="openScheduleModal()">
+    <button type="button" class="btn btn-mealmate-orange d-inline-flex align-items-center justify-content-center gap-2 flex-shrink-0" onclick="openScheduleModal()">
         <i class="bi bi-plus-lg"></i>
         <span>Tambah Jadwal</span>
     </button>
@@ -22,13 +22,13 @@ $bulanSingkat = [1 => 'Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'S
         </div>
     <?php else: ?>
         <div class="table-responsive">
-            <table class="table admin-table mb-0">
+            <table class="table admin-table admin-responsive-schedules mb-0">
                 <thead>
                     <tr>
-                        <th style="width: 190px;">Tanggal</th>
-                        <th style="width: 140px;">Slot</th>
+                        <th style="width: 175px;">Tanggal</th>
+                        <th style="width: 130px;">Slot</th>
                         <th>Menu Disajikan</th>
-                        <th class="text-end" style="width: 110px;">Aksi</th>
+                        <th class="text-end" style="width: 100px;">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -51,38 +51,38 @@ $bulanSingkat = [1 => 'Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'S
                             };
                             $hasImage = !empty($item['image']) && is_file(__DIR__ . '/../../../public/assets/img/' . $item['image']);
                         ?>
-                            <tr>
-                                <td>
+                            <tr class="<?= $idx === 0 ? 'schedule-group-first' : 'schedule-group-item' ?>">
+                                <td class="admin-schedule-date-cell <?= $idx > 0 ? 'd-none d-md-table-cell' : '' ?>">
                                     <?php if ($idx === 0): ?>
-                                        <div class="d-flex align-items-start gap-2">
-                                            <i class="bi bi-calendar3 text-muted mt-1"></i>
-                                            <div>
+                                        <div class="d-flex align-items-center align-items-md-start gap-2">
+                                            <i class="bi bi-calendar3 text-muted mt-md-1"></i>
+                                            <div class="d-flex flex-row flex-md-column align-items-center align-items-md-start gap-2 gap-md-0">
                                                 <div class="fw-semibold text-dark"><?= htmlspecialchars($tglLabel) ?></div>
                                                 <div class="text-muted small"><?= htmlspecialchars($hariLabel) ?></div>
                                             </div>
                                         </div>
                                     <?php endif; ?>
                                 </td>
-                                <td>
+                                <td class="admin-schedule-slot-cell">
                                     <span class="admin-slot-badge <?= $slotClass ?>">
                                         <i class="bi <?= $slotIcon ?>"></i>
                                         <span><?= htmlspecialchars($item['slot']) ?></span>
                                     </span>
                                 </td>
-                                <td>
+                                <td class="admin-schedule-menu-cell">
                                     <div class="d-flex align-items-center gap-3">
                                         <?php if ($hasImage): ?>
                                             <img src="./assets/img/<?= htmlspecialchars($item['image']) ?>" alt="<?= htmlspecialchars($item['menu_name']) ?>" class="admin-schedule-thumb flex-shrink-0">
                                         <?php else: ?>
                                             <div class="admin-schedule-placeholder flex-shrink-0"></div>
                                         <?php endif; ?>
-                                        <div>
+                                        <div class="min-w-0">
                                             <div class="fw-bold text-dark" style="font-size: 13px;"><?= htmlspecialchars($item['menu_name']) ?></div>
                                             <div class="text-muted" style="font-size: 12px;"><?= htmlspecialchars($item['description'] ?? '') ?></div>
                                         </div>
                                     </div>
                                 </td>
-                                <td class="text-end">
+                                <td class="text-end admin-schedule-action-cell">
                                     <button type="button" class="btn btn-sm admin-action-btn"
                                         data-date="<?= htmlspecialchars($item['date']) ?>"
                                         data-slot="<?= htmlspecialchars($item['slot']) ?>"
@@ -106,11 +106,11 @@ $bulanSingkat = [1 => 'Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'S
         </div>
     <?php endif; ?>
 
-    <div class="d-flex flex-column flex-sm-row align-items-sm-center justify-content-between gap-3 pt-3 mt-2 border-top">
-        <span class="text-muted small">Menampilkan <?= count($dates) ?> dari <?= $totalDates ?> tanggal</span>
+    <div class="d-flex flex-column flex-sm-row align-items-center justify-content-between gap-3 pt-3 mt-2 border-top">
+        <span class="text-muted small text-center text-sm-start">Menampilkan <?= count($dates) ?> dari <?= $totalDates ?> tanggal</span>
 
         <?php if ($totalPages > 1): ?>
-            <div class="d-flex align-items-center gap-1">
+            <div class="d-flex align-items-center flex-wrap justify-content-center gap-1">
                 <a href="index.php?page=admin-schedules&q=<?= urlencode($search) ?>&p=<?= max(1, $currentPageNum - 1) ?>"
                    class="btn btn-sm admin-page-btn <?= $currentPageNum <= 1 ? 'disabled' : '' ?>">
                     <i class="bi bi-chevron-left"></i>

@@ -118,7 +118,7 @@ if ($method === 'POST') {
 }
 
 $search = trim($_GET['q'] ?? '');
-$perPage = ($viewMode === 'list') ? 15 : 6;
+$perPage = ($viewMode === 'list') ? 15 : 8;
 $totalMenus = countMenus($search);
 $totalPages = max(1, (int) ceil($totalMenus / $perPage));
 $currentPageNum = max(1, min($totalPages, (int) ($_GET['p'] ?? 1)));

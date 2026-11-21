@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/../models/PackageModel.php';
 
 $features = [
     [
@@ -50,14 +51,32 @@ $steps = [
     ],
 ];
 
-$packages = array_fill(0, 4, [
-    'img' => './assets/img/nasi-lemak.webp',
-    'title' => 'Paket Mingguan',
-    'duration_days' => '5 hari',
-    'applicable_days' => 'Senin - Jumat',
-    'description' => 'Makan siang lengkap tiap hari kerja dengan menu berganti, cocok untuk mahasiswa dan pekerja',
-    'price' => '125.000',
-]);
+$dbPackages = getAllPackages();
+if (!empty($dbPackages)) {
+    $packages = [];
+    foreach (array_slice($dbPackages, 0, 4) as $pkg) {
+        $formattedDays = ($pkg['applicable_days'] === 'Senin-Minggu') ? 'Senin - Minggu' : 'Senin - Jumat';
+        $img = !empty($pkg['image']) ? './assets/img/' . $pkg['image'] : './assets/img/nasi-lemak.webp';
+        $packages[] = [
+            'id' => (int) $pkg['package_id'],
+            'img' => $img,
+            'title' => $pkg['package_name'],
+            'duration_days' => $pkg['duration_days'] . ' hari',
+            'applicable_days' => $formattedDays,
+            'description' => $pkg['description'] ?? '',
+            'price' => number_format((float) $pkg['price'], 0, ',', '.'),
+        ];
+    }
+} else {
+    $packages = array_fill(0, 4, [
+        'img' => './assets/img/nasi-lemak.webp',
+        'title' => 'Paket Mingguan',
+        'duration_days' => '5 hari',
+        'applicable_days' => 'Senin - Jumat',
+        'description' => 'Makan siang lengkap tiap hari kerja dengan menu berganti, cocok untuk mahasiswa dan pekerja',
+        'price' => '125.000',
+    ]);
+}
 $reviews = array_map(static fn (float $rating): array => [
     'name' => 'Luna Maya Lestari',
     'initial_name' => 'LM',

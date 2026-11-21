@@ -47,9 +47,9 @@ mealmate/
    ```
 
 3. **Jalankan Server Lokal**
-   Arahkan *document root* (`-t`) ke folder `public/`:
+   Arahkan *document root* (`-t`) ke folder `public/` (gunakan `PHP_CLI_SERVER_WORKERS=4` agar *built-in server* PHP memproses request secara paralel dan tidak *lag*):
    ```bash
-   php -S localhost:8000 -t public
+   PHP_CLI_SERVER_WORKERS=4 php -S localhost:8000 -t public
    ```
    Buka `http://localhost:8000` di browser.
 

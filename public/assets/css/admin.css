@@ -3,11 +3,79 @@
     color: #1E2923;
 }
 
+@media (min-width: 992px) {
+    .admin-layout {
+        height: 100vh;
+        max-height: 100vh;
+        overflow: hidden;
+    }
+
+    .admin-sidebar {
+        width: 255px;
+        min-width: 255px;
+        height: 100vh;
+        max-height: 100vh;
+        position: sticky;
+        top: 0;
+        overflow-y: auto;
+        flex-shrink: 0;
+        border-right: 1px solid #ECE7DC;
+    }
+
+    .admin-main {
+        height: 100vh;
+        max-height: 100vh;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .admin-topbar {
+        position: sticky;
+        top: 0;
+        z-index: 1020;
+        background-color: rgba(247, 244, 236, 0.95);
+        backdrop-filter: blur(8px);
+    }
+}
+
+@media (max-width: 991.98px) {
+    .admin-topbar {
+        position: sticky;
+        top: 0;
+        z-index: 1020;
+        background-color: rgba(247, 244, 236, 0.95);
+        backdrop-filter: blur(8px);
+        border-bottom: 1px solid #ECE7DC;
+    }
+
+    .admin-sidebar {
+        --bs-offcanvas-width: 270px;
+        max-width: 82vw;
+        border-right: none;
+    }
+}
+
+.admin-main::-webkit-scrollbar,
+.admin-sidebar::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+.admin-main::-webkit-scrollbar-thumb,
+.admin-sidebar::-webkit-scrollbar-thumb {
+    background-color: #D6D0C2;
+    border-radius: 4px;
+}
+
+.admin-main::-webkit-scrollbar-thumb:hover,
+.admin-sidebar::-webkit-scrollbar-thumb:hover {
+    background-color: #B5AEA0;
+}
+
 .admin-sidebar {
-    width: 255px;
-    min-width: 255px;
     background-color: #FBF9F4;
-    border-right: 1px solid #ECE7DC;
+    overflow-y: auto;
 }
 
 .admin-nav-section-title {
@@ -52,6 +120,21 @@
     background-color: transparent;
 }
 
+.admin-global-search {
+    max-width: 420px;
+}
+
+.admin-toolbar-search {
+    max-width: 320px;
+}
+
+@media (max-width: 575.98px) {
+    .admin-global-search,
+    .admin-toolbar-search {
+        max-width: 100%;
+    }
+}
+
 .admin-global-search input,
 .admin-search-input {
     background-color: #FFFFFF;
@@ -65,6 +148,7 @@
     top: calc(100% + 6px);
     left: 0;
     right: 0;
+    min-width: 260px;
     background-color: #FFFFFF;
     border: 1px solid #E6E1D6;
     border-radius: 14px;
@@ -154,7 +238,7 @@
 .admin-page-title {
     color: #0F3E2D;
     font-weight: 700;
-    font-size: clamp(22px, 2vw, 28px);
+    font-size: clamp(20px, 2.2vw, 28px);
 }
 
 .admin-table th {
@@ -186,6 +270,11 @@
 .admin-list-table td {
     padding: 11px 16px;
     border-bottom: none;
+}
+
+.admin-pkg-desc {
+    max-width: 420px;
+    line-height: 1.45;
 }
 
 .admin-checkbox {
@@ -237,15 +326,9 @@
     object-fit: cover;
 }
 
-.admin-kanban-card {
-    border: 1px solid #EFECE4;
-    border-radius: 14px;
-    background-color: #FCFBF8;
-}
-
 .admin-action-btn {
     color: #6B726E;
-    padding: 4px 8px;
+    padding: 5px 8px;
     border: none;
     background: transparent;
 }
@@ -320,4 +403,196 @@
     inset: 8px;
     border-radius: 50%;
     background-color: #F7F4EC;
+}
+
+@media (max-width: 767.98px) {
+    .admin-responsive-menus thead,
+    .admin-responsive-list thead,
+    .admin-responsive-schedules thead,
+    .admin-responsive-packages thead {
+        display: none;
+    }
+
+    .admin-responsive-menus tbody,
+    .admin-responsive-menus tr,
+    .admin-responsive-menus td,
+    .admin-responsive-list tbody,
+    .admin-responsive-list tr,
+    .admin-responsive-list td,
+    .admin-responsive-schedules tbody,
+    .admin-responsive-schedules tr,
+    .admin-responsive-schedules td,
+    .admin-responsive-packages tbody,
+    .admin-responsive-packages tr,
+    .admin-responsive-packages td {
+        display: block;
+        width: 100%;
+    }
+
+    .admin-responsive-menus tr {
+        display: grid;
+        grid-template-columns: 48px 1fr auto;
+        gap: 6px 12px;
+        align-items: start;
+        padding: 14px;
+        margin-bottom: 10px;
+        border: 1px solid #EFECE4;
+        border-radius: 14px;
+        background-color: #FCFBF8;
+    }
+
+    .admin-responsive-menus td {
+        padding: 0;
+        border: none;
+    }
+
+    .admin-menu-photo-cell {
+        grid-column: 1;
+        grid-row: 1 / span 2;
+    }
+
+    .admin-menu-title-cell {
+        grid-column: 2;
+        grid-row: 1;
+        font-size: 14px;
+    }
+
+    .admin-menu-action-cell {
+        grid-column: 3;
+        grid-row: 1;
+        white-space: nowrap;
+    }
+
+    .admin-menu-desc-cell {
+        grid-column: 2 / span 2;
+        grid-row: 2;
+        font-size: 12.5px;
+        line-height: 1.45;
+    }
+
+    .admin-responsive-list tr {
+        display: grid;
+        grid-template-columns: 28px 1fr;
+        gap: 2px 10px;
+        align-items: start;
+        padding: 12px;
+        margin-bottom: 8px;
+        border: 1px solid #EFECE4;
+        border-radius: 12px;
+        background-color: #FCFBF8;
+    }
+
+    .admin-responsive-list td {
+        padding: 0;
+        border: none;
+    }
+
+    .admin-list-check-cell {
+        grid-column: 1;
+        grid-row: 1 / span 2;
+        padding-top: 2px !important;
+    }
+
+    .admin-list-name-cell {
+        grid-column: 2;
+        grid-row: 1;
+        font-size: 14px;
+    }
+
+    .admin-list-desc-cell {
+        grid-column: 2;
+        grid-row: 2;
+        font-size: 12.5px;
+    }
+
+    .admin-responsive-schedules tr {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 10px;
+        align-items: center;
+        padding: 12px 14px;
+        border: 1px solid #EFECE4;
+        border-radius: 12px;
+        margin-bottom: 8px;
+        background-color: #FCFBF8;
+    }
+
+    .admin-responsive-schedules tr.schedule-group-first {
+        margin-top: 14px;
+    }
+
+    .admin-responsive-schedules tr.schedule-group-first:first-child {
+        margin-top: 0;
+    }
+
+    .admin-responsive-schedules td {
+        padding: 0;
+        border: none;
+    }
+
+    .admin-schedule-date-cell {
+        grid-column: 1 / -1;
+        background-color: #F4F1E8;
+        padding: 8px 12px !important;
+        border-radius: 8px;
+        margin-bottom: 2px;
+    }
+
+    .admin-schedule-slot-cell {
+        grid-column: 1;
+    }
+
+    .admin-schedule-action-cell {
+        grid-column: 2;
+    }
+
+    .admin-schedule-menu-cell {
+        grid-column: 1 / -1;
+        padding-top: 4px !important;
+        border-top: 1px dashed #ECE7DC !important;
+    }
+
+    .admin-responsive-packages tr {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 10px;
+        padding: 14px;
+        margin-bottom: 12px;
+        border: 1px solid #EFECE4;
+        border-radius: 14px;
+        background-color: #FCFBF8;
+    }
+
+    .admin-responsive-packages td {
+        padding: 0;
+        border: none;
+    }
+
+    .admin-pkg-main-cell {
+        grid-column: 1;
+        grid-row: 1;
+    }
+
+    .admin-pkg-action-cell {
+        grid-column: 2;
+        grid-row: 1;
+        align-self: start;
+    }
+
+    .admin-pkg-meta-cell {
+        grid-column: 1 / -1;
+        display: flex !important;
+        align-items: center;
+        justify-content: space-between;
+        padding: 6px 10px !important;
+        background-color: #F6F4ED;
+        border-radius: 8px;
+        font-size: 12.5px;
+    }
+
+    .admin-pkg-meta-cell::before {
+        content: attr(data-label);
+        color: #6C736F;
+        font-weight: 500;
+    }
 }

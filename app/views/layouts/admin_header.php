@@ -21,30 +21,34 @@ $currentPage = $_GET['page'] ?? 'admin-dashboard';
         <?php include __DIR__ . '/admin_sidebar.php'; ?>
 
         <div class="admin-main flex-grow-1 d-flex flex-column min-w-0">
-            <header class="admin-topbar d-flex align-items-center justify-content-between px-4 py-3">
-                <div class="d-flex align-items-center gap-3 flex-grow-1">
-                    <button class="btn d-lg-none border-0 p-1" type="button" data-bs-toggle="offcanvas" data-bs-target="#adminSidebarOffcanvas" aria-controls="adminSidebarOffcanvas" aria-label="Toggle Sidebar">
+            <header class="admin-topbar d-flex align-items-center justify-content-between gap-2 gap-sm-3 px-3 px-md-4 py-3">
+                <div class="d-flex align-items-center gap-2 gap-sm-3 flex-grow-1 min-w-0">
+                    <button class="btn d-lg-none border-0 p-1 flex-shrink-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#adminSidebarOffcanvas" aria-controls="adminSidebarOffcanvas" aria-label="Toggle Sidebar">
                         <i class="bi bi-list fs-3"></i>
                     </button>
-                    <div class="admin-global-search position-relative d-none d-sm-block w-100" style="max-width: 420px;" id="adminGlobalSearchContainer">
+                    <div class="admin-global-search position-relative flex-grow-1" id="adminGlobalSearchContainer">
                         <i class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"></i>
                         <input type="search" id="adminGlobalSearchInput" class="form-control ps-5 rounded-3 border-0 shadow-xs" placeholder="Cari menu, paket, atau pesanan..." autocomplete="off">
                         <div id="adminGlobalSearchDropdown" class="admin-search-dropdown d-none"></div>
                     </div>
                 </div>
 
-                <div class="dropdown">
-                    <button class="btn border-0 d-flex align-items-center gap-3 p-0 text-start" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <div class="dropdown flex-shrink-0">
+                    <button class="btn border-0 d-flex align-items-center gap-2 gap-sm-3 p-0 text-start" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <div class="admin-avatar rounded-circle d-flex align-items-center justify-content-center fw-bold text-white">
                             <?= htmlspecialchars(getInitials($adminUser['name'] ?? 'Admin')) ?>
                         </div>
-                        <div class="d-none d-sm-flex flex-column lh-sm">
+                        <div class="d-none d-md-flex flex-column lh-sm">
                             <span class="fw-semibold text-dark" style="font-size: 14px;"><?= htmlspecialchars($adminUser['name'] ?? 'Admin') ?></span>
                             <span class="text-muted" style="font-size: 12px;"><?= htmlspecialchars($adminUser['role'] ?? 'Admin') ?></span>
                         </div>
-                        <i class="bi bi-chevron-down text-muted small"></i>
+                        <i class="bi bi-chevron-down text-muted small d-none d-sm-inline"></i>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 rounded-3 mt-2">
+                        <li class="d-md-none px-3 py-2 border-bottom">
+                            <div class="fw-semibold text-dark small"><?= htmlspecialchars($adminUser['name'] ?? 'Admin') ?></div>
+                            <div class="text-muted" style="font-size: 11px;"><?= htmlspecialchars($adminUser['role'] ?? 'Admin') ?></div>
+                        </li>
                         <li>
                             <a class="dropdown-item py-2" href="index.php?page=home">
                                 <i class="bi bi-globe2 me-2 text-success"></i>Lihat Halaman Pelanggan
@@ -60,5 +64,5 @@ $currentPage = $_GET['page'] ?? 'admin-dashboard';
                 </div>
             </header>
 
-            <main class="admin-content px-4 pb-5 pt-2 flex-grow-1">
+            <main class="admin-content px-3 px-md-4 pb-5 pt-2 flex-grow-1">
                 <?= renderFlash($flash, 'shadow-sm mb-4') ?>
