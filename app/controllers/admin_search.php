@@ -2,6 +2,7 @@
 require_once __DIR__ . '/../config/database.php';
 
 requireRole('Admin');
+session_write_close();
 
 header('Content-Type: application/json; charset=utf-8');
 

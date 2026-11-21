@@ -3,23 +3,21 @@ $startRow = $totalPackages > 0 ? $offset + 1 : 0;
 $endRow = min($offset + $perPage, $totalPackages);
 ?>
 
-<div class="d-flex flex-column flex-sm-row align-items-sm-center justify-content-between gap-3 mb-4">
+<div class="d-flex flex-column flex-sm-row align-items-stretch align-items-sm-center justify-content-between gap-3 mb-4">
     <div>
         <h1 class="admin-page-title mb-1">Master Data Paket</h1>
         <p class="text-muted mb-0">Kelola paket langganan catering harian untuk pelanggan.</p>
     </div>
-    <button type="button" class="btn btn-mealmate-orange d-inline-flex align-items-center gap-2 align-self-start align-self-sm-auto" onclick="openPackageModal('create')">
+    <button type="button" class="btn btn-mealmate-orange d-inline-flex align-items-center justify-content-center gap-2 flex-shrink-0" onclick="openPackageModal('create')">
         <i class="bi bi-plus-lg"></i>
         <span>Tambah Paket</span>
     </button>
 </div>
 
-<?= renderFlash(getFlash()) ?>
-
 <div class="admin-card p-3 p-md-4">
-    <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 mb-4">
+    <div class="d-flex flex-column flex-sm-row align-items-stretch align-items-sm-center justify-content-between gap-3 mb-4">
         <div class="d-flex flex-wrap align-items-center gap-2 flex-grow-1">
-            <form action="index.php" method="get" class="position-relative flex-grow-1" style="max-width: 320px;">
+            <form action="index.php" method="get" class="position-relative flex-grow-1 admin-toolbar-search">
                 <input type="hidden" name="page" value="admin-packages">
                 <i class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"></i>
                 <input type="text" name="q" value="<?= htmlspecialchars($search) ?>" class="form-control ps-5 rounded-3 admin-search-input" placeholder="Cari paket...">
@@ -30,7 +28,7 @@ $endRow = min($offset + $perPage, $totalPackages);
                 </a>
             <?php endif; ?>
         </div>
-        <span class="text-muted small fw-medium"><?= $totalPackages ?> paket</span>
+        <span class="text-muted small fw-medium align-self-end align-self-sm-center flex-shrink-0"><?= $totalPackages ?> paket</span>
     </div>
 
     <?php if (empty($packages)): ?>
@@ -40,14 +38,14 @@ $endRow = min($offset + $perPage, $totalPackages);
         </div>
     <?php else: ?>
         <div class="table-responsive">
-            <table class="table admin-table mb-0">
+            <table class="table admin-table admin-responsive-packages mb-0">
                 <thead>
                     <tr>
-                        <th style="min-width: 260px;">Nama Paket</th>
-                        <th style="min-width: 130px;">Durasi (Hari)</th>
-                        <th style="min-width: 160px;">Hari Berlaku</th>
-                        <th style="min-width: 140px;">Harga</th>
-                        <th class="text-end" style="width: 110px;">Aksi</th>
+                        <th>Nama Paket</th>
+                        <th style="width: 120px;">Durasi (Hari)</th>
+                        <th style="width: 150px;">Hari Berlaku</th>
+                        <th style="width: 140px;">Harga</th>
+                        <th class="text-end" style="width: 100px;">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -56,35 +54,35 @@ $endRow = min($offset + $perPage, $totalPackages);
                         $formattedDays = ($pkg['applicable_days'] === 'Senin-Minggu') ? 'Senin - Minggu' : 'Senin - Jumat';
                     ?>
                         <tr>
-                            <td>
-                                <div class="d-flex align-items-center gap-3">
+                            <td class="admin-pkg-main-cell">
+                                <div class="d-flex align-items-start align-items-md-center gap-3">
                                     <?php if ($hasImage): ?>
-                                        <img src="./assets/img/<?= htmlspecialchars($pkg['image']) ?>" alt="<?= htmlspecialchars($pkg['package_name']) ?>" class="admin-menu-thumb">
+                                        <img src="./assets/img/<?= htmlspecialchars($pkg['image']) ?>" alt="<?= htmlspecialchars($pkg['package_name']) ?>" class="admin-menu-thumb flex-shrink-0">
                                     <?php else: ?>
-                                        <div class="admin-menu-icon">
+                                        <div class="admin-menu-icon flex-shrink-0">
                                             <i class="bi bi-box-seam"></i>
                                         </div>
                                     <?php endif; ?>
-                                    <div>
+                                    <div class="min-w-0">
                                         <div class="fw-semibold text-dark"><?= htmlspecialchars($pkg['package_name']) ?></div>
-                                        <div class="text-muted small text-truncate" style="max-width: 380px;">
+                                        <div class="text-muted small admin-pkg-desc">
                                             <?= htmlspecialchars($pkg['description'] ?? '') ?>
                                         </div>
                                     </div>
                                 </div>
                             </td>
-                            <td>
-                                <span class="fw-medium text-dark"><?= (int) $pkg['duration_days'] ?></span>
+                            <td class="admin-pkg-meta-cell" data-label="Durasi">
+                                <span class="fw-medium text-dark"><?= (int) $pkg['duration_days'] ?> <span class="d-md-none">Hari</span></span>
                             </td>
-                            <td>
+                            <td class="admin-pkg-meta-cell" data-label="Hari Berlaku">
                                 <span class="fw-medium text-dark"><?= htmlspecialchars($formattedDays) ?></span>
                             </td>
-                            <td>
+                            <td class="admin-pkg-meta-cell" data-label="Harga">
                                 <span class="fw-semibold text-dark"><?= formatRupiah($pkg['price']) ?></span>
                             </td>
-                            <td class="text-end">
+                            <td class="text-end admin-pkg-action-cell">
                                 <div class="d-inline-flex align-items-center gap-1">
-                                    <button type="button" class="btn btn-sm btn-light border-0 text-muted hover-dark"
+                                    <button type="button" class="btn btn-sm admin-action-btn"
                                             title="Ubah Paket"
                                             data-id="<?= (int) $pkg['package_id'] ?>"
                                             data-name="<?= htmlspecialchars($pkg['package_name'], ENT_QUOTES) ?>"
@@ -95,7 +93,7 @@ $endRow = min($offset + $perPage, $totalPackages);
                                             onclick="openPackageModalFromBtn(this)">
                                         <i class="bi bi-pencil"></i>
                                     </button>
-                                    <button type="button" class="btn btn-sm btn-light border-0 text-muted hover-danger"
+                                    <button type="button" class="btn btn-sm admin-action-btn"
                                             title="Hapus Paket"
                                             data-id="<?= (int) $pkg['package_id'] ?>"
                                             data-name="<?= htmlspecialchars($pkg['package_name'], ENT_QUOTES) ?>"
@@ -111,7 +109,7 @@ $endRow = min($offset + $perPage, $totalPackages);
         </div>
 
         <div class="d-flex flex-column flex-sm-row align-items-center justify-content-between gap-3 mt-4 pt-3 border-top">
-            <span class="text-muted small">
+            <span class="text-muted small text-center text-sm-start">
                 <?php if ($totalPackages <= $perPage): ?>
                     Menampilkan <?= $totalPackages ?> dari <?= $totalPackages ?> paket
                 <?php else: ?>
@@ -119,7 +117,7 @@ $endRow = min($offset + $perPage, $totalPackages);
                 <?php endif; ?>
             </span>
 
-            <div class="d-flex align-items-center gap-1">
+            <div class="d-flex align-items-center flex-wrap justify-content-center gap-1">
                 <a href="index.php?page=admin-packages&p=<?= max(1, $currentPageNum - 1) ?>&q=<?= urlencode($search) ?>"
                    class="btn btn-sm admin-page-btn <?= $currentPageNum <= 1 ? 'disabled' : '' ?>"
                    aria-label="Halaman Sebelumnya">
@@ -141,7 +139,6 @@ $endRow = min($offset + $perPage, $totalPackages);
     <?php endif; ?>
 </div>
 
-<!-- Modal Form Tambah / Ubah Paket -->
 <div class="modal fade" id="packageFormModal" tabindex="-1" aria-hidden="true" <?= !empty($errors) ? 'data-auto-open="true"' : '' ?>>
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-0 rounded-4">
@@ -235,7 +232,6 @@ $endRow = min($offset + $perPage, $totalPackages);
     </div>
 </div>
 
-<!-- Modal Konfirmasi Hapus Paket -->
 <div class="modal fade" id="deletePackageModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-sm">
         <div class="modal-content border-0 rounded-4">

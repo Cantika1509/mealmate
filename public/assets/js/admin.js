@@ -39,9 +39,9 @@ function updateBulkDeleteState() {
     if (btn) {
         btn.classList.toggle('d-none', checked.length === 0);
     }
-    if (selectAll && checkboxes.length > 0) {
-        selectAll.checked = checked.length === checkboxes.length;
-    }
+    document.querySelectorAll('.select-all-menus-cb').forEach(function (masterCb) {
+        masterCb.checked = checkboxes.length > 0 && checked.length === checkboxes.length;
+    });
 }
 
 function openBulkDeleteModal() {
