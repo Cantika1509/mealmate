@@ -73,6 +73,57 @@ function openDeleteScheduleModal(btn) {
     new bootstrap.Modal(document.getElementById('deleteScheduleModal')).show();
 }
 
+function openPackageModal(mode, id = 0, name = '', duration = '', applicable = '', price = '', desc = '') {
+    var formAction = document.getElementById('packageFormAction');
+    var formId = document.getElementById('packageFormId');
+    var nameInput = document.getElementById('package_name');
+    var durationInput = document.getElementById('duration_days');
+    var applicableInput = document.getElementById('applicable_days');
+    var priceInput = document.getElementById('price');
+    var descInput = document.getElementById('description');
+    var imgInput = document.getElementById('image');
+    var formTitle = document.getElementById('packageFormTitle');
+
+    if (formAction) formAction.value = mode;
+    if (formId) formId.value = id;
+    if (nameInput) nameInput.value = name;
+    if (durationInput) durationInput.value = duration;
+    if (applicableInput) applicableInput.value = applicable;
+    if (priceInput) priceInput.value = price;
+    if (descInput) descInput.value = desc;
+    if (imgInput) imgInput.value = '';
+    if (formTitle) formTitle.textContent = mode === 'update' ? 'Ubah Data Paket' : 'Tambah Paket Baru';
+
+    var modalEl = document.getElementById('packageFormModal');
+    if (modalEl) {
+        new bootstrap.Modal(modalEl).show();
+    }
+}
+
+function openPackageModalFromBtn(btn) {
+    openPackageModal(
+        'update',
+        btn.dataset.id,
+        btn.dataset.name,
+        btn.dataset.duration,
+        btn.dataset.applicable,
+        btn.dataset.price,
+        btn.dataset.desc
+    );
+}
+
+function openDeletePackageModal(btn) {
+    var idInput = document.getElementById('deletePackageId');
+    var nameLabel = document.getElementById('deletePackageName');
+    if (idInput) idInput.value = btn.dataset.id;
+    if (nameLabel) nameLabel.textContent = btn.dataset.name;
+
+    var modalEl = document.getElementById('deletePackageModal');
+    if (modalEl) {
+        new bootstrap.Modal(modalEl).show();
+    }
+}
+
 window.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('.modal[data-auto-open="true"]').forEach(function (modalEl) {
         new bootstrap.Modal(modalEl).show();

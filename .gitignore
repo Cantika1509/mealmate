@@ -11,8 +11,10 @@ app/config/credentials.*
 /build/
 /docs/
 public/assets/img/menu_*
+public/assets/img/package_*
 public/assets/img/pkg_*
 public/assets/img/pay_*
+public/assets/img/img_*
 
 .php_cs.cache
 .php-cs-fixer.cache

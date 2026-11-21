@@ -125,26 +125,32 @@ $endRow = min($offset + $perPage, $totalMenus);
     <?php endif; ?>
 
     <div class="d-flex flex-column flex-sm-row align-items-sm-center justify-content-between gap-3 pt-3 mt-2 border-top">
-        <span class="text-muted small">Menampilkan <?= $startRow ?>–<?= $endRow ?> dari <?= $totalMenus ?> menu</span>
+        <span class="text-muted small">
+            <?php if ($totalMenus <= $perPage): ?>
+                Menampilkan <?= $totalMenus ?> dari <?= $totalMenus ?> menu
+            <?php else: ?>
+                Menampilkan <?= $startRow ?>–<?= $endRow ?> dari <?= $totalMenus ?> menu
+            <?php endif; ?>
+        </span>
 
-        <?php if ($totalPages > 1): ?>
-            <div class="d-flex align-items-center gap-1">
-                <a href="index.php?page=admin-menus&view=<?= urlencode($viewMode) ?>&q=<?= urlencode($search) ?>&p=<?= max(1, $currentPageNum - 1) ?>"
-                   class="btn btn-sm admin-page-btn <?= $currentPageNum <= 1 ? 'disabled' : '' ?>">
-                    <i class="bi bi-chevron-left"></i>
+        <div class="d-flex align-items-center gap-1">
+            <a href="index.php?page=admin-menus&view=<?= urlencode($viewMode) ?>&q=<?= urlencode($search) ?>&p=<?= max(1, $currentPageNum - 1) ?>"
+               class="btn btn-sm admin-page-btn <?= $currentPageNum <= 1 ? 'disabled' : '' ?>"
+               aria-label="Halaman Sebelumnya">
+                <i class="bi bi-chevron-left"></i>
+            </a>
+            <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                <a href="index.php?page=admin-menus&view=<?= urlencode($viewMode) ?>&q=<?= urlencode($search) ?>&p=<?= $i ?>"
+                   class="btn btn-sm admin-page-btn <?= $i === $currentPageNum ? 'active' : '' ?>">
+                    <?= $i ?>
                 </a>
-                <?php for ($i = 1; $i <= $totalPages; $i++): ?>
-                    <a href="index.php?page=admin-menus&view=<?= urlencode($viewMode) ?>&q=<?= urlencode($search) ?>&p=<?= $i ?>"
-                       class="btn btn-sm admin-page-btn <?= $i === $currentPageNum ? 'active' : '' ?>">
-                        <?= $i ?>
-                    </a>
-                <?php endfor; ?>
-                <a href="index.php?page=admin-menus&view=<?= urlencode($viewMode) ?>&q=<?= urlencode($search) ?>&p=<?= min($totalPages, $currentPageNum + 1) ?>"
-                   class="btn btn-sm admin-page-btn <?= $currentPageNum >= $totalPages ? 'disabled' : '' ?>">
-                    <i class="bi bi-chevron-right"></i>
-                </a>
-            </div>
-        <?php endif; ?>
+            <?php endfor; ?>
+            <a href="index.php?page=admin-menus&view=<?= urlencode($viewMode) ?>&q=<?= urlencode($search) ?>&p=<?= min($totalPages, $currentPageNum + 1) ?>"
+               class="btn btn-sm admin-page-btn <?= $currentPageNum >= $totalPages ? 'disabled' : '' ?>"
+               aria-label="Halaman Selanjutnya">
+                <i class="bi bi-chevron-right"></i>
+            </a>
+        </div>
     </div>
 </div>
 

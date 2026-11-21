@@ -21,7 +21,7 @@ $currentPage = $_GET['page'] ?? 'admin-dashboard';
         <?php include __DIR__ . '/admin_sidebar.php'; ?>
 
         <div class="admin-main flex-grow-1 d-flex flex-column min-w-0">
-            <header class="admin-topbar d-flex align-items-center justify-content-between px-4 py-3">
+            <header class="admin-topbar d-flex align-items-center justify-content-between px-3 px-sm-4 py-3">
                 <div class="d-flex align-items-center gap-3 flex-grow-1">
                     <button class="btn d-lg-none border-0 p-1" type="button" data-bs-toggle="offcanvas" data-bs-target="#adminSidebarOffcanvas" aria-controls="adminSidebarOffcanvas" aria-label="Toggle Sidebar">
                         <i class="bi bi-list fs-3"></i>
@@ -60,5 +60,5 @@ $currentPage = $_GET['page'] ?? 'admin-dashboard';
                 </div>
             </header>
 
-            <main class="admin-content px-4 pb-5 pt-2 flex-grow-1">
+            <main class="admin-content px-3 px-sm-4 pb-5 pt-2 flex-grow-1">
                 <?= renderFlash($flash, 'shadow-sm mb-4') ?>
