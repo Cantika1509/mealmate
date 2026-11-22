@@ -213,4 +213,78 @@ switch ($page) {
             'errors' => getValidationErrors(),
         ], 'auth');
         break;
+
+    case 'change-password':
+        requireRole('Pelanggan');
+
+        $userId = currentUser()['user_id'];
+        $user = findUserById($userId);
+
+        if (!$user) {
+            session_unset();
+            session_destroy();
+            session_start();
+            setFlash('warning', 'Akun Anda tidak ditemukan. Silakan login kembali.');
+            redirect('index.php?page=login');
+        }
+
+        if ($method === 'POST') {
+            $oldPassword = $_POST['old_password'] ?? '';
+            $newPassword = $_POST['new_password'] ?? '';
+            $confirmPassword = $_POST['confirm_password'] ?? '';
+            $errors = [];
+
+            if ($oldPassword === '') {
+                $errors['old_password'] = 'Password lama wajib diisi.';
+            } elseif (!password_verify($oldPassword, $user['password'])) {
+                $errors['old_password'] = 'Password lama salah.';
+            }
+
+            if ($newPassword === '') {
+                $errors['new_password'] = 'Password baru wajib diisi.';
+            } elseif (strlen($newPassword) < 8) {
+                $errors['new_password'] = 'Password baru minimal 8 karakter.';
+            } elseif (strlen($newPassword) > 72) {
+                $errors['new_password'] = 'Password baru maksimal 72 karakter.';
+            } elseif (empty($errors['old_password']) && $newPassword === $oldPassword) {
+                $errors['new_password'] = 'Password baru harus berbeda dari password lama.';
+            }
+
+            if ($confirmPassword === '') {
+                $errors['confirm_password'] = 'Konfirmasi password wajib diisi.';
+            } elseif ($newPassword !== $confirmPassword) {
+                $errors['confirm_password'] = 'Konfirmasi password tidak cocok.';
+            }
+
+            if (!empty($errors)) {
+                redirectWithErrors('index.php?page=change-password', $errors);
+            }
+
+            $saved = false;
+
+            try {
+                $saved = updateUserPassword($userId, $newPassword);
+            } catch (PDOException $e) {
+                error_log($e->getMessage());
+            }
+
+            if (!$saved) {
+                setFlash('danger', 'Password gagal diubah. Silakan coba lagi.');
+                redirect('index.php?page=change-password');
+            }
+
+            session_regenerate_id(true);
+            $_SESSION['password_changed'] = true;
+            redirect('index.php?page=change-password');
+        }
+
+        $passwordChanged = !empty($_SESSION['password_changed']);
+        unset($_SESSION['password_changed']);
+
+        render('auth/change_password', [
+            'title' => 'Ubah Password - MealMate',
+            'passwordChanged' => $passwordChanged,
+            'errors' => getValidationErrors(),
+        ], 'auth');
+        break;
 }
