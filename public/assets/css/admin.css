@@ -405,11 +405,128 @@
     background-color: #F7F4EC;
 }
 
+.admin-order-total-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background-color: #FAF0E4;
+    color: #D96B38;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+.admin-status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 11.5px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.admin-status-pill .status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: currentColor;
+}
+
+.admin-status-pending {
+    background-color: #FBF1DF;
+    color: #B47218;
+}
+
+.admin-status-active {
+    background-color: #E2F2E8;
+    color: #1A6B46;
+}
+
+.admin-status-completed {
+    background-color: #DFF0EC;
+    color: #13523C;
+}
+
+.admin-status-rejected {
+    background-color: #FBE6E6;
+    color: #C53030;
+}
+
+.admin-status-cancelled {
+    background-color: #EFECE6;
+    color: #5C6460;
+}
+
+.admin-status-unpaid {
+    background-color: #F6ECE3;
+    color: #A65E2E;
+}
+
+.admin-detail-btn {
+    border-radius: 20px;
+    border: 1px solid #E2DDD1;
+    background-color: #FFFFFF;
+    color: #2B332E;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 12px;
+}
+
+.admin-detail-btn:hover {
+    background-color: #13523C;
+    border-color: #13523C;
+    color: #FFFFFF;
+}
+
+.admin-pkg-detail-thumb {
+    width: 56px;
+    height: 56px;
+    border-radius: 12px;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.admin-verify-banner-pending {
+    background-color: #FDF6EA;
+    border: 1px solid #F4DFB8;
+    color: #9A6112;
+}
+
+.admin-verify-banner-active,
+.admin-verify-banner-completed {
+    background-color: #EAF5EE;
+    border: 1px solid #C6E3D1;
+    color: #165B3B;
+}
+
+.admin-verify-banner-rejected {
+    background-color: #FDF0F0;
+    border: 1px solid #F3CACA;
+    color: #A82828;
+}
+
+.admin-verify-banner-cancelled,
+.admin-verify-banner-unpaid {
+    background-color: #F6F4ED;
+    border: 1px solid #E5E0D3;
+    color: #555C58;
+}
+
+.admin-proof-viewer {
+    background-color: #EFECE6;
+    min-height: 280px;
+}
+
 @media (max-width: 767.98px) {
     .admin-responsive-menus thead,
     .admin-responsive-list thead,
     .admin-responsive-schedules thead,
-    .admin-responsive-packages thead {
+    .admin-responsive-packages thead,
+    .admin-responsive-orders thead {
         display: none;
     }
 
@@ -424,7 +541,10 @@
     .admin-responsive-schedules td,
     .admin-responsive-packages tbody,
     .admin-responsive-packages tr,
-    .admin-responsive-packages td {
+    .admin-responsive-packages td,
+    .admin-responsive-orders tbody,
+    .admin-responsive-orders tr,
+    .admin-responsive-orders td {
         display: block;
         width: 100%;
     }
@@ -594,5 +714,69 @@
         content: attr(data-label);
         color: #6C736F;
         font-weight: 500;
+    }
+
+    .admin-responsive-orders tr {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 8px 10px;
+        padding: 14px;
+        margin-bottom: 12px;
+        border: 1px solid #EFECE4;
+        border-radius: 14px;
+        background-color: #FCFBF8;
+    }
+
+    .admin-responsive-orders td {
+        padding: 0;
+        border: none;
+    }
+
+    .admin-ord-id-cell {
+        grid-column: 1;
+        grid-row: 1;
+    }
+
+    .admin-ord-status-cell {
+        grid-column: 2;
+        grid-row: 1;
+        align-self: start;
+    }
+
+    .admin-ord-cust-cell,
+    .admin-ord-pkg-cell,
+    .admin-ord-date-cell,
+    .admin-ord-price-cell {
+        grid-column: 1 / -1;
+        display: flex !important;
+        align-items: center;
+        justify-content: space-between;
+        padding: 6px 10px !important;
+        background-color: #F6F4ED;
+        border-radius: 8px;
+        font-size: 12.5px;
+        text-align: right;
+    }
+
+    .admin-ord-cust-cell::before,
+    .admin-ord-pkg-cell::before,
+    .admin-ord-date-cell::before,
+    .admin-ord-price-cell::before {
+        content: attr(data-label);
+        color: #6C736F;
+        font-weight: 500;
+        text-align: left;
+    }
+
+    .admin-ord-action-cell {
+        grid-column: 1 / -1;
+        padding-top: 4px !important;
+    }
+
+    .admin-ord-action-cell .admin-detail-btn {
+        display: inline-flex;
+        width: 100%;
+        justify-content: center;
+        padding: 7px 14px;
     }
 }
