@@ -79,7 +79,7 @@ if (!empty($orders)) {
         $items[] = [
             'title' => sprintf('#ORD-%03d — %s', (int) $o['order_id'], $o['customer_name']),
             'subtitle' => $o['package_name'] . ' • ' . $o['status'],
-            'url' => 'index.php?page=admin-orders&q=' . urlencode((string) $o['order_id']),
+            'url' => 'index.php?page=admin-order-detail&id=' . (int) $o['order_id'],
             'icon' => 'bi-credit-card',
         ];
     }

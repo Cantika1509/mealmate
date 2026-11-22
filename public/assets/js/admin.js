@@ -124,6 +124,24 @@ function openDeletePackageModal(btn) {
     }
 }
 
+function handlePaymentProofError() {
+    var img = document.getElementById('paymentProofImg');
+    var fallback = document.getElementById('paymentProofFallback');
+    if (img) img.classList.add('d-none');
+    if (fallback) fallback.classList.remove('d-none');
+}
+
+function reloadPaymentProofImage(url) {
+    if (!url) return;
+    var img = document.getElementById('paymentProofImg');
+    var fallback = document.getElementById('paymentProofFallback');
+    if (img) {
+        img.classList.remove('d-none');
+        img.src = url + (url.indexOf('?') === -1 ? '?' : '&') + 't=' + Date.now();
+        if (fallback) fallback.classList.add('d-none');
+    }
+}
+
 window.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('.modal[data-auto-open="true"]').forEach(function (modalEl) {
         new bootstrap.Modal(modalEl).show();
