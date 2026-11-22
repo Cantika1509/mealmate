@@ -63,7 +63,7 @@
                             <p class="profile-subtitle">Perbarui informasi pribadi Anda agar tetap sesuai.</p>
                         </div>
 
-                        <form action="index.php?page=profile" method="POST" novalidate>
+                        <form id="profile-form" action="index.php?page=profile" method="POST" novalidate>
                             <input type="hidden" name="action" value="update_profile">
 
                             <div class="profile-field">
@@ -77,6 +77,7 @@
                                         maxlength="100"
                                         class="form-control profile-input <?= !empty($errors['name']) ? 'is-invalid' : '' ?>"
                                         value="<?= escape($form['name']) ?>"
+                                        data-initial="<?= escape($profile['name']) ?>"
                                         required
                                     >
                                     <?php if (!empty($errors['name'])): ?>
@@ -96,6 +97,7 @@
                                         maxlength="100"
                                         class="form-control profile-input <?= !empty($errors['email']) ? 'is-invalid' : '' ?>"
                                         value="<?= escape($form['email']) ?>"
+                                        data-initial="<?= escape($profile['email']) ?>"
                                         required
                                     >
                                     <?php if (!empty($errors['email'])): ?>
@@ -115,6 +117,7 @@
                                         maxlength="15"
                                         class="form-control profile-input <?= !empty($errors['phone_number']) ? 'is-invalid' : '' ?>"
                                         value="<?= escape($form['phone_number']) ?>"
+                                        data-initial="<?= escape($profile['phone_number']) ?>"
                                         required
                                     >
                                     <?php if (!empty($errors['phone_number'])): ?>
@@ -131,6 +134,7 @@
                                         name="address"
                                         id="address"
                                         rows="3"
+                                        data-initial="<?= escape($profile['address']) ?>"
                                         class="form-control profile-input profile-textarea <?= !empty($errors['address']) ? 'is-invalid' : '' ?>"
                                     ><?= escape($form['address']) ?></textarea>
                                     <?php if (!empty($errors['address'])): ?>
@@ -139,10 +143,44 @@
                                 </div>
                             </div>
 
-                            <button type="submit" class="btn profile-submit-btn w-100 fw-semibold d-flex align-items-center justify-content-center gap-2">
+                            <button type="submit" id="profile-submit" class="btn profile-submit-btn w-100 fw-semibold d-flex align-items-center justify-content-center gap-2">
                                 <i class="bi bi-floppy"></i>
                                 <span>Simpan Perubahan</span>
                             </button>
+
+                            <div class="modal fade profile-modal" id="email-confirm-modal" tabindex="-1" aria-labelledby="email-confirm-title" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header border-0 pb-0">
+                                            <h2 class="modal-title" id="email-confirm-title">Konfirmasi Perubahan Email</h2>
+                                            <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal" aria-label="Tutup"></button>
+                                        </div>
+
+                                        <div class="modal-body">
+                                            <p class="profile-modal-text mb-3">Masukkan password Anda untuk melanjutkan. Setelah email diubah, Anda akan keluar dan perlu login ulang.</p>
+                                            <label for="current_password" class="profile-label">Password Saat Ini</label>
+                                            <div class="profile-input-group">
+                                                <i class="bi bi-lock profile-input-icon"></i>
+                                                <input
+                                                    type="password"
+                                                    name="current_password"
+                                                    id="current_password"
+                                                    autocomplete="current-password"
+                                                    class="form-control profile-input <?= !empty($errors['current_password']) ? 'is-invalid' : '' ?>"
+                                                >
+                                                <?php if (!empty($errors['current_password'])): ?>
+                                                    <div class="invalid-feedback"><?= escape($errors['current_password']) ?></div>
+                                                <?php endif; ?>
+                                            </div>
+                                        </div>
+
+                                        <div class="modal-footer border-0 pt-0">
+                                            <button type="button" class="btn btn-light profile-cancel-btn" data-bs-dismiss="modal">Batal</button>
+                                            <button type="submit" class="btn profile-submit-btn px-4">Konfirmasi</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </form>
                     </section>
                 </div>
