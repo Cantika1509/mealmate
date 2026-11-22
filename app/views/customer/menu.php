@@ -91,7 +91,7 @@
                     </p>
                 </div>
 
-                <div class="packages-nav d-none d-md-flex gap-2">
+                <div class="packages-nav d-none gap-2" id="packages-nav">
                     <button type="button" class="btn-package-nav" id="package-prev" aria-label="Sebelumnya">
                         <i class="bi bi-chevron-left"></i>
                     </button>
