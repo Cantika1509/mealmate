@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'updat
 
     if ($phone === '') {
         $errors['phone_number'] = 'Nomor telepon wajib diisi.';
-    } elseif (!preg_match('/^[0-9+\-\s]{9,15}$/', $phone)) {
+    } elseif (normalizePhoneNumber($phone) === null) {
         $errors['phone_number'] = 'Format nomor telepon tidak valid (9-15 digit angka).';
     }
 
@@ -75,7 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'updat
             $userId,
             $name,
             $emailChanged ? $email : $user['email'],
-            $phone,
+            normalizePhoneNumber($phone),
             $address !== '' ? $address : null
         );
     } catch (PDOException $e) {
