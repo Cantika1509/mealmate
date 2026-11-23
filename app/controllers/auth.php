@@ -67,7 +67,7 @@ switch ($page) {
 
             if ($email === '') {
                 $errors['email'] = 'Email wajib diisi.';
-            } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            } elseif (mb_strlen($email) > 100 || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 $errors['email'] = 'Format email tidak valid.';
             } elseif (isEmailTaken($email)) {
                 $errors['email'] = 'Email sudah terdaftar';

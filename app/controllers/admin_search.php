@@ -59,7 +59,10 @@ if (!empty($packages)) {
 }
 
 $cleanOrderQ = ltrim($q, '#ORDordMm-0');
-$exactOrderId = ctype_digit($cleanOrderQ) && $cleanOrderQ !== '' ? (int) $cleanOrderQ : -1;
+$validOrderId = ($cleanOrderQ !== '' && ctype_digit($cleanOrderQ))
+    ? filter_var($cleanOrderQ, FILTER_VALIDATE_INT, ['options' => ['min_range' => 1, 'max_range' => 2147483647]])
+    : false;
+$exactOrderId = $validOrderId !== false ? $validOrderId : -1;
 $orderIdLike = '%' . ($cleanOrderQ !== '' ? $cleanOrderQ : $q) . '%';
 $stmtOrd = $pdo->prepare(
     "SELECT o.order_id, u.name AS customer_name, p.package_name, o.status
