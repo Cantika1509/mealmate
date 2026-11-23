@@ -84,9 +84,9 @@
                     </div>
                     <div class="banner-cto">
                         <p>Bergabunglah dengan ribuan mahasiswa dan pekerja lainnya yang sudah merasakan kemudahan dan kelezatan MealMate setiap hari.</p>
-                        <button class="btn banner-cto-btn">
+                        <a href="index.php?page=menu#packages-section" class="btn banner-cto-btn">
                             Mulai Pesan Sekarang
-                        </button>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -126,9 +126,9 @@
                                     <p>Rp <?= htmlspecialchars($package['price']) ?> <span>/ Minggu</span></p>
                                 </div>
 
-                                <button class="btn">
+                                <a href="<?= !empty($package['id']) ? 'index.php?page=checkout&package_id=' . (int) $package['id'] : 'index.php?page=menu#packages-section' ?>" class="btn">
                                     Pilih Paket
-                                </button>
+                                </a>
                             </div>
                         </div>
                     </div>

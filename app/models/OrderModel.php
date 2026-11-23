@@ -91,23 +91,35 @@ function getAdminOrders(string $status = '', string $search = '', int $limit = 1
     return $stmt->fetchAll();
 }
 
-function getOrderWithDetailsById(int $orderId): ?array {
+function getOrderWithDetailsById(int $orderId, ?int $userId = null): ?array {
     $pdo = getDBConnection();
-    $stmt = $pdo->prepare(
-        "SELECT o.order_id, o.user_id, o.package_id, o.start_date, o.slot,
-                o.delivery_address, o.notes, o.total_price, o.status, o.created_at,
-                u.name AS customer_name, u.email AS customer_email, u.phone_number AS customer_phone,
-                p.package_name, p.description AS package_description, p.price AS package_price,
-                p.image AS package_image, p.duration_days, p.applicable_days,
-                pay.payment_id, pay.payment_proof, pay.status AS payment_status, pay.rejection_reason
-         FROM orders o
-         JOIN users u ON u.user_id = o.user_id
-         JOIN packages p ON p.package_id = o.package_id
-         LEFT JOIN payments pay ON pay.order_id = o.order_id
-         WHERE o.order_id = :id
-         LIMIT 1"
-    );
-    $stmt->execute(['id' => $orderId]);
+    $sql = "SELECT o.order_id, o.user_id, o.package_id, o.start_date, o.slot,
+                   o.delivery_address, o.notes, o.total_price, o.status, o.created_at,
+                   u.name AS customer_name, u.email AS customer_email, u.phone_number AS customer_phone,
+                   p.package_name, p.description AS package_description, p.price AS package_price,
+                   p.image AS package_image, p.duration_days, p.applicable_days,
+                   pay.payment_id, pay.payment_proof, pay.status AS payment_status, pay.rejection_reason
+            FROM orders o
+            JOIN users u ON u.user_id = o.user_id
+            JOIN packages p ON p.package_id = o.package_id
+            LEFT JOIN payments pay ON pay.payment_id = (
+                SELECT p2.payment_id
+                FROM payments p2
+                WHERE p2.order_id = o.order_id
+                ORDER BY p2.payment_id DESC
+                LIMIT 1
+            )
+            WHERE o.order_id = :id";
+
+    $params = ['id' => $orderId];
+    if ($userId !== null) {
+        $sql .= " AND o.user_id = :user_id";
+        $params['user_id'] = $userId;
+    }
+    $sql .= " LIMIT 1";
+
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute($params);
     $row = $stmt->fetch();
     if (!$row) {
         return null;
@@ -120,6 +132,70 @@ function getOrderWithDetailsById(int $orderId): ?array {
     );
 
     return $row;
+}
+
+function createCustomerOrder(
+    int $userId,
+    int $packageId,
+    string $startDate,
+    string $slot,
+    string $deliveryAddress,
+    ?string $notes,
+    int $totalPrice
+): int {
+    $pdo = getDBConnection();
+    $stmt = $pdo->prepare(
+        "INSERT INTO orders (user_id, package_id, start_date, slot, delivery_address, notes, total_price, status)
+         VALUES (:user_id, :package_id, :start_date, :slot, :delivery_address, :notes, :total_price, 'Belum Dibayar')"
+    );
+    $stmt->execute([
+        'user_id' => $userId,
+        'package_id' => $packageId,
+        'start_date' => $startDate,
+        'slot' => $slot,
+        'delivery_address' => trim($deliveryAddress),
+        'notes' => ($notes !== null && trim($notes) !== '') ? trim($notes) : null,
+        'total_price' => $totalPrice,
+    ]);
+    return (int) $pdo->lastInsertId();
+}
+
+function cancelCustomerOrder(int $orderId, int $userId): array {
+    $order = getOrderWithDetailsById($orderId, $userId);
+    if (!$order) {
+        return ['ok' => false, 'message' => 'Pesanan tidak ditemukan.'];
+    }
+
+    if ($order['status'] !== 'Belum Dibayar' || !empty($order['payment_id'])) {
+        return [
+            'ok' => false,
+            'message' => 'Pesanan yang sudah mengirim bukti pembayaran, sedang diproses, atau selesai tidak dapat dibatalkan.',
+        ];
+    }
+
+    $pdo = getDBConnection();
+    $stmt = $pdo->prepare(
+        "UPDATE orders
+         SET status = 'Dibatalkan'
+         WHERE order_id = :order_id AND user_id = :user_id AND status = 'Belum Dibayar'"
+    );
+    $stmt->execute([
+        'order_id' => $orderId,
+        'user_id' => $userId,
+    ]);
+
+    if ($stmt->rowCount() === 0) {
+        return ['ok' => false, 'message' => 'Gagal membatalkan pesanan.'];
+    }
+
+    return ['ok' => true];
+}
+
+function hasOrderReview(int $orderId): bool {
+    $pdo = getDBConnection();
+    $stmt = $pdo->prepare("SELECT COUNT(*) FROM reviews WHERE order_id = :order_id");
+    $stmt->execute(['order_id' => $orderId]);
+    return (int) $stmt->fetchColumn() > 0;
 }
 
 function verifyOrderPayment(int $orderId, string $decision, ?string $rejectionReason = null): array {
