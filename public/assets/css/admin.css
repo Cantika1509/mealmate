@@ -815,3 +815,190 @@
         padding: 7px 14px;
     }
 }
+
+/* customers */
+.admin-cust-avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12.5px;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+/* profil pelanggan (warna dari user_id % 3) */
+.admin-avatar-c0 { background-color: #F9DDD4; color: #B24A2A; }
+.admin-avatar-c1 { background-color: #FCEFC8; color: #8A5A00; }
+.admin-avatar-c2 { background-color: #D5E7DD; color: #1F5A44; }
+
+.admin-cust-name {
+    color: #12201A;
+}
+
+.admin-cust-addr {
+    display: block;
+    max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #4A524D;
+}
+
+.admin-password-toggle {
+    position: absolute;
+    top: 0;
+    right: 4px;
+    height: 38px;
+    color: #7D827E;
+    border: none;
+    background: transparent;
+    z-index: 3;
+}
+
+/* hilangin icon tanda seru di pass */
+#customer_password.is-invalid,
+#customer_password.is-invalid:focus {
+    background-image: none;
+}
+
+@media (min-width: 768px) {
+    .admin-responsive-customers {
+        table-layout: fixed;
+    }
+
+    .admin-cust-name-cell .fw-bold,
+    .admin-cust-email-cell,
+    .admin-cust-phone-cell {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .admin-responsive-customers thead {
+        display: none;
+    }
+
+    .admin-responsive-customers tbody,
+    .admin-responsive-customers tr,
+    .admin-responsive-customers td {
+        display: block;
+        width: 100%;
+    }
+
+    .admin-responsive-customers tr {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 8px 10px;
+        padding: 14px;
+        margin-bottom: 12px;
+        border: 1px solid #EFECE4;
+        border-radius: 14px;
+        background-color: #FCFBF8;
+    }
+
+    .admin-responsive-customers td {
+        padding: 0;
+        border: none;
+    }
+
+    .admin-cust-name-cell {
+        grid-column: 1;
+        grid-row: 1;
+    }
+
+    .admin-cust-action-cell {
+        grid-column: 2;
+        grid-row: 1;
+        align-self: start;
+    }
+
+    .admin-responsive-customers td.admin-cust-email-cell,
+    .admin-responsive-customers td.admin-cust-phone-cell,
+    .admin-responsive-customers td.admin-cust-addr-cell {
+        grid-column: 1 / -1;
+        display: flex !important;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 6px 10px !important;
+        border-radius: 8px;
+        font-size: 12.5px;
+        text-align: right;
+        word-break: break-all;
+    }
+
+    .admin-cust-email-cell::before,
+    .admin-cust-phone-cell::before,
+    .admin-cust-addr-cell::before {
+        content: attr(data-label);
+        color: #6C736F;
+        font-weight: 500;
+        text-align: left;
+        flex-shrink: 0;
+    }
+
+    .admin-cust-addr {
+        max-width: 60vw;
+    }
+}
+
+/* hapus background putih */
+@media (max-width: 767.98px) {
+    .admin-responsive-menus td,
+    .admin-responsive-list td,
+    .admin-responsive-schedules td,
+    .admin-responsive-packages td,
+    .admin-responsive-orders td,
+    .admin-responsive-customers td {
+        background-color: transparent;
+        box-shadow: none;
+    }
+
+    .admin-responsive-schedules td.admin-schedule-date-cell {
+        background-color: #F4F1E8;
+    }
+
+    .admin-responsive-packages td.admin-pkg-meta-cell,
+    .admin-responsive-orders td.admin-ord-cust-cell,
+    .admin-responsive-orders td.admin-ord-pkg-cell,
+    .admin-responsive-orders td.admin-ord-date-cell,
+    .admin-responsive-orders td.admin-ord-price-cell,
+    .admin-responsive-customers td.admin-cust-email-cell,
+    .admin-responsive-customers td.admin-cust-phone-cell,
+    .admin-responsive-customers td.admin-cust-addr-cell {
+        background-color: #F6F4ED;
+    }
+}
+
+/* toast notifikasi */
+.flash-toast {
+    position: fixed;
+    top: 80px;
+    right: 16px;
+    z-index: 1100;
+    width: min(500px, calc(100vw - 32px));
+    animation: flash-toast-in 0.25s ease-out;
+}
+
+@keyframes flash-toast-in {
+    from {
+        opacity: 0;
+        transform: translateY(-12px);
+    }
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .flash-toast {
+        animation: none;
+    }
+}
