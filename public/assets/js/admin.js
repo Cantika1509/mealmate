@@ -173,6 +173,17 @@ function openDeleteCustomerModal(btn) {
     new bootstrap.Modal(document.getElementById('deleteCustomerModal')).show();
 }
 
+document.addEventListener('submit', function (e) {
+    var btn = e.target.querySelector('button[type="submit"]');
+    if (btn) btn.disabled = true;
+});
+
+window.addEventListener('pageshow', function (e) {
+    if (e.persisted) {
+        document.querySelectorAll('button[type="submit"]').forEach(function (b) { b.disabled = false; });
+    }
+});
+
 window.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('.modal[data-auto-open="true"]').forEach(function (modalEl) {
         new bootstrap.Modal(modalEl).show();

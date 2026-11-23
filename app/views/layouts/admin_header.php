@@ -65,4 +65,8 @@ $currentPage = $_GET['page'] ?? 'admin-dashboard';
             </header>
 
             <main class="admin-content px-3 px-md-4 pb-5 pt-2 flex-grow-1">
-                <?= renderFlash($flash, 'shadow-sm mb-4') ?>
+                <?php if (!empty($flash)): ?>
+                    <div class="flash-toast" id="flash-toast">
+                        <?= renderFlash($flash, 'shadow-sm mb-0') ?>
+                    </div>
+                <?php endif; ?>
