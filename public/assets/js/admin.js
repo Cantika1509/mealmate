@@ -1,4 +1,16 @@
+function clearModalValidationState(modalEl) {
+    if (!modalEl) return;
+    modalEl.querySelectorAll('.is-invalid').forEach(function (el) {
+        el.classList.remove('is-invalid');
+    });
+    modalEl.querySelectorAll('.modal-validation-alert').forEach(function (el) {
+        el.remove();
+    });
+}
+
 function openMenuModal(mode, id = 0, name = '', desc = '') {
+    var modalEl = document.getElementById('menuFormModal');
+    clearModalValidationState(modalEl);
     document.getElementById('menuFormAction').value = mode;
     document.getElementById('menuFormId').value = id;
     document.getElementById('menu_name').value = name;
@@ -6,7 +18,7 @@ function openMenuModal(mode, id = 0, name = '', desc = '') {
     var imgInput = document.getElementById('image');
     if (imgInput) imgInput.value = '';
     document.getElementById('menuFormTitle').textContent = mode === 'update' ? 'Ubah Data Menu' : 'Tambah Menu Baru';
-    new bootstrap.Modal(document.getElementById('menuFormModal')).show();
+    new bootstrap.Modal(modalEl).show();
 }
 
 function openMenuModalFromBtn(btn) {
@@ -52,6 +64,8 @@ function openBulkDeleteModal() {
 }
 
 function openScheduleModal(date = '', slot = 'Pagi', menuId = '', origDate = '', origSlot = '') {
+    var modalEl = document.getElementById('scheduleFormModal');
+    clearModalValidationState(modalEl);
     var dateInput = document.getElementById('schedule_date');
     dateInput.value = date || dateInput.dataset.today || '';
     document.getElementById('schedule_slot').value = slot;
@@ -59,7 +73,7 @@ function openScheduleModal(date = '', slot = 'Pagi', menuId = '', origDate = '',
     document.getElementById('scheduleOriginalDate').value = origDate;
     document.getElementById('scheduleOriginalSlot').value = origSlot;
     document.getElementById('scheduleModalTitle').textContent = origDate ? 'Ubah Jadwal Menu' : 'Tambah Jadwal Menu';
-    new bootstrap.Modal(document.getElementById('scheduleFormModal')).show();
+    new bootstrap.Modal(modalEl).show();
 }
 
 function openScheduleModalFromBtn(btn) {
@@ -74,6 +88,8 @@ function openDeleteScheduleModal(btn) {
 }
 
 function openPackageModal(mode, id = 0, name = '', duration = '', applicable = '', price = '', desc = '') {
+    var modalEl = document.getElementById('packageFormModal');
+    clearModalValidationState(modalEl);
     var formAction = document.getElementById('packageFormAction');
     var formId = document.getElementById('packageFormId');
     var nameInput = document.getElementById('package_name');
@@ -94,7 +110,6 @@ function openPackageModal(mode, id = 0, name = '', duration = '', applicable = '
     if (imgInput) imgInput.value = '';
     if (formTitle) formTitle.textContent = mode === 'update' ? 'Ubah Data Paket' : 'Tambah Paket Baru';
 
-    var modalEl = document.getElementById('packageFormModal');
     if (modalEl) {
         new bootstrap.Modal(modalEl).show();
     }
@@ -163,7 +178,7 @@ window.addEventListener('DOMContentLoaded', function () {
 
     function renderResults(groups, query) {
         if (!groups || groups.length === 0) {
-            dropdown.innerHTML = '<div class="p-3 text-center text-muted small">Tidak ditemukan hasil untuk "<strong>' + escapeHtml(query) + '</strong>"</div>';
+            dropdown.innerHTML = '<div class="p-3 text-center text-muted small text-truncate">Tidak ditemukan hasil untuk "<strong>' + escapeHtml(query) + '</strong>"</div>';
             dropdown.classList.remove('d-none');
             return;
         }
@@ -174,11 +189,11 @@ window.addEventListener('DOMContentLoaded', function () {
             group.items.forEach(function (item) {
                 html += '<a href="' + escapeHtml(item.url) + '" class="admin-search-item d-flex align-items-center gap-3 text-decoration-none">' +
                     '<div class="admin-search-item-icon"><i class="bi ' + escapeHtml(item.icon) + '"></i></div>' +
-                    '<div class="min-w-0 flex-grow-1">' +
+                    '<div class="min-w-0 flex-grow-1 overflow-hidden">' +
                         '<div class="fw-semibold text-dark text-truncate" style="font-size: 13px;">' + escapeHtml(item.title) + '</div>' +
                         '<div class="text-muted text-truncate" style="font-size: 11.5px;">' + escapeHtml(item.subtitle) + '</div>' +
                     '</div>' +
-                    '<i class="bi bi-chevron-right text-muted small"></i>' +
+                    '<i class="bi bi-chevron-right text-muted small flex-shrink-0"></i>' +
                 '</a>';
             });
         });

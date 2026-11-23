@@ -4,7 +4,9 @@ require_once __DIR__ . '/../models/OrderModel.php';
 requireRole('Admin');
 
 $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
-$orderId = (int) ($_GET['id'] ?? ($_POST['order_id'] ?? 0));
+$rawOrderId = trim((string) ($_GET['id'] ?? ($_POST['order_id'] ?? '0')));
+$validOrderId = filter_var($rawOrderId, FILTER_VALIDATE_INT, ['options' => ['min_range' => 1, 'max_range' => 2147483647]]);
+$orderId = $validOrderId !== false ? $validOrderId : 0;
 
 if ($orderId <= 0) {
     setFlash('danger', 'ID pesanan tidak valid.');

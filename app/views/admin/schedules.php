@@ -139,11 +139,18 @@ $bulanSingkat = [1 => 'Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'S
                 <input type="hidden" name="original_slot" id="scheduleOriginalSlot" value="<?= htmlspecialchars($old['original_slot'] ?? '') ?>">
 
                 <div class="modal-header border-bottom-0 pb-0 px-4 pt-4">
-                    <h5 class="modal-title fw-bold" id="scheduleModalTitle">Atur Jadwal Menu</h5>
+                    <h5 class="modal-title fw-bold" id="scheduleModalTitle"><?= !empty($old['original_date']) ? 'Ubah Jadwal Menu' : 'Atur Jadwal Menu' ?></h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
                 <div class="modal-body px-4 py-3">
+                    <?php if (!empty($errors)): ?>
+                        <div class="alert alert-warning d-flex align-items-center gap-2 py-2 px-3 rounded-3 small mb-3 modal-validation-alert" role="alert">
+                            <i class="bi bi-exclamation-triangle-fill flex-shrink-0"></i>
+                            <div><?= htmlspecialchars($errors['general'] ?? 'Mohon periksa kembali input yang ditandai di bawah ini.') ?></div>
+                        </div>
+                    <?php endif; ?>
+
                     <div class="mb-3">
                         <label for="schedule_date" class="form-label fw-medium small">Tanggal Penyajian <span class="text-danger">*</span></label>
                         <input type="date" name="date" id="schedule_date"

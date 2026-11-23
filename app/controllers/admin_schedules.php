@@ -11,13 +11,17 @@ if ($method === 'POST') {
     if ($action === 'save') {
         $date = trim($_POST['date'] ?? '');
         $slot = trim($_POST['slot'] ?? '');
-        $menuId = (int) ($_POST['menu_id'] ?? 0);
+        $validMenuId = filter_var(trim((string) ($_POST['menu_id'] ?? '0')), FILTER_VALIDATE_INT, [
+            'options' => ['min_range' => 1, 'max_range' => 2147483647],
+        ]);
+        $menuId = $validMenuId !== false ? $validMenuId : 0;
         $origDate = trim($_POST['original_date'] ?? '');
         $origSlot = trim($_POST['original_slot'] ?? '');
         $errors = [];
 
         $parsedDate = DateTimeImmutable::createFromFormat('Y-m-d', $date);
-        if ($date === '' || !$parsedDate || $parsedDate->format('Y-m-d') !== $date) {
+        $year = $parsedDate ? (int) $parsedDate->format('Y') : 0;
+        if ($date === '' || !$parsedDate || $parsedDate->format('Y-m-d') !== $date || $year < 2000 || $year > 2100) {
             $errors['date'] = 'Tanggal penyajian wajib diisi dengan format yang valid.';
         }
 
@@ -29,15 +33,17 @@ if ($method === 'POST') {
             $errors['menu_id'] = 'Menu hidangan wajib dipilih.';
         }
 
+        $oldInput = [
+            'modal_open' => '1',
+            'date' => $date,
+            'slot' => $slot,
+            'menu_id' => $menuId,
+            'original_date' => $origDate,
+            'original_slot' => $origSlot,
+        ];
+
         if (!empty($errors)) {
-            redirectWithErrors('index.php?page=admin-schedules', $errors, [
-                'modal_open' => '1',
-                'date' => $date,
-                'slot' => $slot,
-                'menu_id' => $menuId,
-                'original_date' => $origDate,
-                'original_slot' => $origSlot,
-            ]);
+            redirectWithErrors('index.php?page=admin-schedules', $errors, $oldInput);
         }
 
         $isMoved = $origDate !== '' && $origSlot !== '' && ($origDate !== $date || $origSlot !== $slot);
@@ -47,12 +53,21 @@ if ($method === 'POST') {
         }
 
         $pdo = getDBConnection();
-        $pdo->beginTransaction();
-        if ($isMoved) {
-            deleteDailyMenu($origDate, $origSlot);
+        try {
+            $pdo->beginTransaction();
+            if ($isMoved) {
+                deleteDailyMenu($origDate, $origSlot);
+            }
+            setDailyMenu($menuId, $date, $slot);
+            $pdo->commit();
+        } catch (Throwable $e) {
+            if ($pdo->inTransaction()) {
+                $pdo->rollBack();
+            }
+            redirectWithErrors('index.php?page=admin-schedules', [
+                'general' => 'Gagal menyimpan jadwal menu. Pastikan tanggal dan menu sudah valid.',
+            ], $oldInput);
         }
-        setDailyMenu($menuId, $date, $slot);
-        $pdo->commit();
 
         setFlash('success', 'Jadwal menu berhasil disimpan.');
         redirect('index.php?page=admin-schedules');
@@ -62,7 +77,8 @@ if ($method === 'POST') {
         $date = trim($_POST['date'] ?? '');
         $slot = trim($_POST['slot'] ?? '');
 
-        if ($date === '' || !isValidSlot($slot)) {
+        $parsedDate = DateTimeImmutable::createFromFormat('Y-m-d', $date);
+        if ($date === '' || !$parsedDate || $parsedDate->format('Y-m-d') !== $date || !isValidSlot($slot)) {
             setFlash('danger', 'Data jadwal tidak valid.');
             redirect('index.php?page=admin-schedules');
         }
@@ -82,7 +98,8 @@ $search = trim($_GET['q'] ?? '');
 $perPage = 4;
 $totalDates = countScheduledDates($search);
 $totalPages = max(1, (int) ceil($totalDates / $perPage));
-$currentPageNum = max(1, min($totalPages, (int) ($_GET['p'] ?? 1)));
+$rawPage = filter_var($_GET['p'] ?? 1, FILTER_VALIDATE_INT, ['options' => ['min_range' => 1, 'max_range' => 2147483647]]);
+$currentPageNum = max(1, min($totalPages, $rawPage !== false ? $rawPage : 1));
 $offset = ($currentPageNum - 1) * $perPage;
 $dates = getScheduledDatesPaginated($search, $perPage, $offset);
 $schedulesByDate = getSchedulesByDates($dates);

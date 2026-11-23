@@ -3,6 +3,10 @@
     color: #1E2923;
 }
 
+.min-w-0 {
+    min-width: 0 !important;
+}
+
 @media (min-width: 992px) {
     .admin-layout {
         height: 100vh;
@@ -122,10 +126,12 @@
 
 .admin-global-search {
     max-width: 420px;
+    min-width: 0;
 }
 
 .admin-toolbar-search {
     max-width: 320px;
+    min-width: 0;
 }
 
 @media (max-width: 575.98px) {
@@ -148,13 +154,15 @@
     top: calc(100% + 6px);
     left: 0;
     right: 0;
-    min-width: 260px;
+    width: 100%;
+    max-width: 100%;
     background-color: #FFFFFF;
     border: 1px solid #E6E1D6;
     border-radius: 14px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
     max-height: 380px;
     overflow-y: auto;
+    overflow-x: hidden;
     z-index: 1050;
     padding: 6px;
 }
@@ -166,12 +174,17 @@
     letter-spacing: 0.5px;
     color: #8A8E87;
     padding: 8px 10px 4px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .admin-search-item {
     padding: 8px 10px;
     border-radius: 10px;
     transition: background-color 0.15s ease;
+    max-width: 100%;
+    overflow: hidden;
 }
 
 .admin-search-item:hover {
@@ -241,6 +254,19 @@
     font-size: clamp(20px, 2.2vw, 28px);
 }
 
+.table,
+.admin-table {
+    --bs-table-bg: transparent;
+    --bs-table-accent-bg: transparent;
+}
+
+.table > :not(caption) > * > *,
+.admin-table > :not(caption) > * > * {
+    background-color: transparent;
+    box-shadow: none;
+}
+
+.admin-table > thead > tr > th,
 .admin-table th {
     font-size: 12.5px;
     font-weight: 600;
@@ -522,6 +548,10 @@
 }
 
 @media (max-width: 767.98px) {
+    .admin-card {
+        background-color: #FBF9F4;
+    }
+
     .admin-responsive-menus thead,
     .admin-responsive-list thead,
     .admin-responsive-schedules thead,
@@ -564,6 +594,7 @@
     .admin-responsive-menus td {
         padding: 0;
         border: none;
+        background-color: transparent;
     }
 
     .admin-menu-photo-cell {
@@ -605,6 +636,7 @@
     .admin-responsive-list td {
         padding: 0;
         border: none;
+        background-color: transparent;
     }
 
     .admin-list-check-cell {
@@ -648,9 +680,10 @@
     .admin-responsive-schedules td {
         padding: 0;
         border: none;
+        background-color: transparent;
     }
 
-    .admin-schedule-date-cell {
+    .admin-table .admin-schedule-date-cell {
         grid-column: 1 / -1;
         background-color: #F4F1E8;
         padding: 8px 12px !important;
@@ -686,6 +719,7 @@
     .admin-responsive-packages td {
         padding: 0;
         border: none;
+        background-color: transparent;
     }
 
     .admin-pkg-main-cell {
@@ -699,7 +733,7 @@
         align-self: start;
     }
 
-    .admin-pkg-meta-cell {
+    .admin-table .admin-pkg-meta-cell {
         grid-column: 1 / -1;
         display: flex !important;
         align-items: center;
@@ -730,6 +764,7 @@
     .admin-responsive-orders td {
         padding: 0;
         border: none;
+        background-color: transparent;
     }
 
     .admin-ord-id-cell {
@@ -743,10 +778,10 @@
         align-self: start;
     }
 
-    .admin-ord-cust-cell,
-    .admin-ord-pkg-cell,
-    .admin-ord-date-cell,
-    .admin-ord-price-cell {
+    .admin-table .admin-ord-cust-cell,
+    .admin-table .admin-ord-pkg-cell,
+    .admin-table .admin-ord-date-cell,
+    .admin-table .admin-ord-price-cell {
         grid-column: 1 / -1;
         display: flex !important;
         align-items: center;

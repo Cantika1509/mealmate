@@ -173,14 +173,21 @@ $endRow = min($offset + $perPage, $totalMenus);
                 <input type="hidden" name="menu_id" id="menuFormId" value="<?= (int) ($old['menu_id'] ?? 0) ?>">
 
                 <div class="modal-header border-bottom-0 pb-0 px-4 pt-4">
-                    <h5 class="modal-title fw-bold" id="menuFormTitle">Tambah Menu Baru</h5>
+                    <h5 class="modal-title fw-bold" id="menuFormTitle"><?= (($old['modal_mode'] ?? 'create') === 'update') ? 'Ubah Data Menu' : 'Tambah Menu Baru' ?></h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
                 <div class="modal-body px-4 py-3">
+                    <?php if (!empty($errors)): ?>
+                        <div class="alert alert-warning d-flex align-items-center gap-2 py-2 px-3 rounded-3 small mb-3 modal-validation-alert" role="alert">
+                            <i class="bi bi-exclamation-triangle-fill flex-shrink-0"></i>
+                            <div><?= htmlspecialchars($errors['general'] ?? 'Mohon periksa kembali input yang ditandai di bawah ini.') ?></div>
+                        </div>
+                    <?php endif; ?>
+
                     <div class="mb-3">
                         <label for="menu_name" class="form-label fw-medium small">Nama Menu <span class="text-danger">*</span></label>
-                        <input type="text" name="menu_name" id="menu_name"
+                        <input type="text" name="menu_name" id="menu_name" maxlength="100"
                                class="form-control <?= !empty($errors['menu_name']) ? 'is-invalid' : '' ?>"
                                value="<?= htmlspecialchars($old['menu_name'] ?? '') ?>"
                                placeholder="Contoh: Ayam Bakar Kecap" required>
