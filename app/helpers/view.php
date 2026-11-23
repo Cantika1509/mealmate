@@ -67,3 +67,7 @@ function getInitials(string $name): string {
 function formatRupiah(int|float $amount): string {
     return 'Rp ' . number_format((float) $amount, 0, ',', '.');
 }
+
+function escape(?string $value): string {
+    return htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8');
+}

@@ -18,6 +18,8 @@ $flash = $flash ?? getFlash();
         <link rel="stylesheet" href="./assets/css/menu.css">
     <?php elseif ($currentPage === 'about'): ?>
         <link rel="stylesheet" href="./assets/css/about.css">
+    <?php elseif ($currentPage === 'profile'): ?>
+        <link rel="stylesheet" href="./assets/css/profile.css">
     <?php endif; ?>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -29,7 +31,13 @@ $flash = $flash ?? getFlash();
     <?php include __DIR__ . '/navbar.php'; ?>
 
     <?php if (!empty($flash)): ?>
-        <div class="container mt-3">
-            <?= renderFlash($flash, 'shadow-sm mb-0') ?>
-        </div>
+        <?php if ($currentPage === 'profile'): ?>
+            <div class="flash-toast" id="flash-toast">
+                <?= renderFlash($flash, 'shadow-sm mb-0') ?>
+            </div>
+        <?php else: ?>
+            <div class="container mt-3">
+                <?= renderFlash($flash, 'shadow-sm mb-0') ?>
+            </div>
+        <?php endif; ?>
     <?php endif; ?>

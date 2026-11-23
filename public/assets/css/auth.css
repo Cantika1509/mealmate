@@ -87,6 +87,12 @@
     box-shadow: 0 0 0 3px rgba(19, 82, 60, 0.12);
 }
 
+ /* hide icon tanda seru untuk password */
+.auth-input-group:has(.auth-password-toggle) .auth-input.is-invalid,
+.auth-input-group:has(.auth-password-toggle) .auth-input.is-invalid:focus {
+    background-image: none;
+}
+
 .auth-password-toggle {
     position: absolute;
     top: 10px;
@@ -143,4 +149,45 @@
 .auth-card-title {
     color: #134A32;
     font-size: 28px;
+}
+
+/* animasi centang succes */
+.success-check {
+    width: 88px;
+    height: 88px;
+}
+
+.success-check-circle,
+.success-check-mark {
+    stroke: #075D48;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.success-check-circle {
+    stroke-width: 3;
+    stroke-dasharray: 151;
+    stroke-dashoffset: 151;
+    animation: success-check-draw 0.5s ease-out forwards;
+}
+
+.success-check-mark {
+    stroke-width: 4;
+    stroke-dasharray: 40;
+    stroke-dashoffset: 40;
+    animation: success-check-draw 0.35s ease-out 0.45s forwards;
+}
+
+@keyframes success-check-draw {
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .success-check-circle,
+    .success-check-mark {
+        animation: none;
+        stroke-dashoffset: 0;
+    }
 }

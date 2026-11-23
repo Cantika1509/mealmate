@@ -1,3 +1,4 @@
+<?php if (empty($hideFooter)): ?>
 <footer>
     <div class="container">
         <div class="footer-container d-flex flex-column flex-md-row justify-content-between align-items-center align-items-md-start gap-4 gap-md-0">
@@ -49,8 +50,13 @@
         </div>
     </div>
 </footer>
+<?php endif; ?>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="./assets/js/menu-toggle.js"></script>
+    <?php if (($_GET['page'] ?? '') === 'profile'): ?>
+        <script src="./assets/js/flash-toast.js"></script>
+        <script src="./assets/js/profile.js"></script>
+    <?php endif; ?>
 </body>
 </html>
