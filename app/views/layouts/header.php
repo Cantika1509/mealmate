@@ -18,6 +18,8 @@ $flash = $flash ?? getFlash();
         <link rel="stylesheet" href="./assets/css/menu.css">
     <?php elseif ($currentPage === 'about'): ?>
         <link rel="stylesheet" href="./assets/css/about.css">
+    <?php elseif (in_array($currentPage, ['checkout', 'order-detail'], true)): ?>
+        <link rel="stylesheet" href="./assets/css/checkout.css">
     <?php elseif ($currentPage === 'profile'): ?>
         <link rel="stylesheet" href="./assets/css/profile.css">
     <?php endif; ?>
@@ -36,7 +38,7 @@ $flash = $flash ?? getFlash();
                 <?= renderFlash($flash, 'shadow-sm mb-0') ?>
             </div>
         <?php else: ?>
-            <div class="container mt-3">
+            <div class="container mt-3 mb-3">
                 <?= renderFlash($flash, 'shadow-sm mb-0') ?>
             </div>
         <?php endif; ?>
