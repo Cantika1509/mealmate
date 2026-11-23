@@ -124,6 +124,55 @@ function openDeletePackageModal(btn) {
     }
 }
 
+// customers
+function togglePasswordVisibility(inputId, btnElem) {
+    var input = document.getElementById(inputId);
+    if (!input) return;
+    var icon = btnElem.querySelector('i');
+    var show = input.type === 'password';
+    input.type = show ? 'text' : 'password';
+    if (icon) {
+        icon.classList.toggle('bi-eye', show);
+        icon.classList.toggle('bi-eye-slash', !show);
+    }
+}
+
+function openCustomerModal(mode, id = 0, name = '', email = '', phone = '', address = '') {
+    var isUpdate = mode === 'update';
+
+    document.getElementById('customerFormAction').value = mode;
+    document.getElementById('customerFormId').value = id;
+    document.getElementById('customer_name').value = name;
+    document.getElementById('customer_email').value = email;
+    document.getElementById('customer_phone').value = phone;
+    document.getElementById('customer_address').value = address;
+
+    var pwd = document.getElementById('customer_password');
+    pwd.value = '';
+    pwd.type = 'password';
+    var toggleIcon = pwd.parentElement.querySelector('.admin-password-toggle i');
+    if (toggleIcon) {
+        toggleIcon.classList.remove('bi-eye');
+        toggleIcon.classList.add('bi-eye-slash');
+    }
+
+    document.getElementById('customerFormTitle').textContent = isUpdate ? 'Ubah Data Pelanggan' : 'Tambah Pelanggan Baru';
+    document.getElementById('customerPasswordRequired').style.display = isUpdate ? 'none' : '';
+    document.getElementById('customerPasswordHint').style.display = isUpdate ? '' : 'none';
+
+    new bootstrap.Modal(document.getElementById('customerFormModal')).show();
+}
+
+function openCustomerModalFromBtn(btn) {
+    openCustomerModal('update', btn.dataset.id, btn.dataset.name, btn.dataset.email, btn.dataset.phone, btn.dataset.address);
+}
+
+function openDeleteCustomerModal(btn) {
+    document.getElementById('deleteCustomerId').value = btn.dataset.id;
+    document.getElementById('deleteCustomerName').textContent = btn.dataset.name;
+    new bootstrap.Modal(document.getElementById('deleteCustomerModal')).show();
+}
+
 window.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('.modal[data-auto-open="true"]').forEach(function (modalEl) {
         new bootstrap.Modal(modalEl).show();
