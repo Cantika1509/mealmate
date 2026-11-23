@@ -75,7 +75,7 @@ switch ($page) {
 
             if ($phone === '') {
                 $errors['phone_number'] = 'Nomor telepon wajib diisi.';
-            } elseif (!preg_match('/^[0-9+\-\s]{9,15}$/', $phone)) {
+            } elseif (normalizePhoneNumber($phone) === null) {
                 $errors['phone_number'] = 'Format nomor telepon tidak valid (9-15 digit angka).';
             }
 
@@ -93,7 +93,7 @@ switch ($page) {
                 ]);
             }
 
-            createCustomerUser($name, $email, $phone, $password);
+            createCustomerUser($name, $email, normalizePhoneNumber($phone), $password);
             setFlash('success', 'Pendaftaran akun berhasil! Silakan masuk menggunakan email dan password Anda.');
             redirect('index.php?page=login');
         }
