@@ -25,6 +25,7 @@ $routeMap = [
     'logout' => $controllersDir . 'auth.php',
     'forgot-password' => $controllersDir . 'auth.php',
     'reset-password' => $controllersDir . 'auth.php',
+    'change-password' => $controllersDir . 'auth.php',
 
     'admin-dashboard' => $controllersDir . 'admin_dashboard.php',
     'admin-menus' => $controllersDir . 'admin_menus.php',

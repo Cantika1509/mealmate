@@ -13,7 +13,8 @@ $perPage = 10;
 $totalOrders = countAdminOrders($statusFilter, $search);
 $totalAllOrders = countAdminOrders('Semua', '');
 $totalPages = max(1, (int) ceil($totalOrders / $perPage));
-$currentPageNum = max(1, min($totalPages, (int) ($_GET['p'] ?? 1)));
+$rawPage = filter_var($_GET['p'] ?? 1, FILTER_VALIDATE_INT, ['options' => ['min_range' => 1, 'max_range' => 2147483647]]);
+$currentPageNum = max(1, min($totalPages, $rawPage !== false ? $rawPage : 1));
 $offset = ($currentPageNum - 1) * $perPage;
 $orders = getAdminOrders($statusFilter, $search, $perPage, $offset);
 

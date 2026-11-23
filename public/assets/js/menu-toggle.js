@@ -189,9 +189,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function initPackageSlider() {
     const track = document.getElementById('package-track');
+    const nav = document.getElementById('packages-nav');
     const prev = document.getElementById('package-prev');
     const next = document.getElementById('package-next');
-    if (!track || !prev || !next) return;
+    if (!track || !nav || !prev || !next) return;
 
     const step = () => {
         const card = track.querySelector('.package-card');
@@ -199,6 +200,23 @@ function initPackageSlider() {
         return card ? card.offsetWidth + gap : track.clientWidth;
     };
 
+    function updateNav() {
+        const overflow = track.scrollWidth > track.clientWidth + 1;
+
+        nav.classList.toggle('d-md-flex', overflow);
+        track.classList.toggle('justify-content-center', !overflow);
+
+        prev.disabled = track.scrollLeft <= 0;
+        next.disabled = track.scrollLeft + track.clientWidth >= track.scrollWidth - 1;
+    }
+
     prev.addEventListener('click', () => track.scrollBy({ left: -step(), behavior: 'smooth' }));
     next.addEventListener('click', () => track.scrollBy({ left: step(), behavior: 'smooth' }));
+
+    track.addEventListener('scroll', updateNav, { passive: true });
+    window.addEventListener('resize', updateNav);
+    window.addEventListener('load', updateNav);   
+    if ('ResizeObserver' in window) new ResizeObserver(updateNav).observe(track);
+
+    updateNav();
 }

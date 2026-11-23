@@ -147,14 +147,21 @@ $endRow = min($offset + $perPage, $totalPackages);
                 <input type="hidden" name="package_id" id="packageFormId" value="<?= (int) ($old['package_id'] ?? 0) ?>">
 
                 <div class="modal-header border-bottom-0 pb-0 px-4 pt-4">
-                    <h5 class="modal-title fw-bold" id="packageFormTitle">Tambah Paket Baru</h5>
+                    <h5 class="modal-title fw-bold" id="packageFormTitle"><?= (($old['modal_mode'] ?? 'create') === 'update') ? 'Ubah Data Paket' : 'Tambah Paket Baru' ?></h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
                 <div class="modal-body px-4 py-3">
+                    <?php if (!empty($errors)): ?>
+                        <div class="alert alert-warning d-flex align-items-center gap-2 py-2 px-3 rounded-3 small mb-3 modal-validation-alert" role="alert">
+                            <i class="bi bi-exclamation-triangle-fill flex-shrink-0"></i>
+                            <div><?= htmlspecialchars($errors['general'] ?? 'Mohon periksa kembali input yang ditandai di bawah ini.') ?></div>
+                        </div>
+                    <?php endif; ?>
+
                     <div class="mb-3">
                         <label for="package_name" class="form-label fw-medium small">Nama Paket <span class="text-danger">*</span></label>
-                        <input type="text" name="package_name" id="package_name"
+                        <input type="text" name="package_name" id="package_name" maxlength="100"
                                class="form-control <?= !empty($errors['package_name']) ? 'is-invalid' : '' ?>"
                                value="<?= htmlspecialchars($old['package_name'] ?? '') ?>"
                                placeholder="Contoh: Paket Hemat" required>
@@ -166,7 +173,7 @@ $endRow = min($offset + $perPage, $totalPackages);
                     <div class="row g-2 mb-3">
                         <div class="col-sm-6">
                             <label for="duration_days" class="form-label fw-medium small">Durasi (Hari) <span class="text-danger">*</span></label>
-                            <input type="number" name="duration_days" id="duration_days" min="1"
+                            <input type="number" name="duration_days" id="duration_days" min="1" max="365"
                                    class="form-control <?= !empty($errors['duration_days']) ? 'is-invalid' : '' ?>"
                                    value="<?= htmlspecialchars($old['duration_days'] ?? '') ?>"
                                    placeholder="Contoh: 5" required>
@@ -191,9 +198,9 @@ $endRow = min($offset + $perPage, $totalPackages);
 
                     <div class="mb-3">
                         <label for="price" class="form-label fw-medium small">Harga (Rp) <span class="text-danger">*</span></label>
-                        <div class="input-group">
+                        <div class="input-group has-validation">
                             <span class="input-group-text bg-light text-muted border-end-0">Rp</span>
-                            <input type="number" name="price" id="price" min="1" step="1000"
+                            <input type="number" name="price" id="price" min="1" max="2000000000" step="1000"
                                    class="form-control border-start-0 <?= !empty($errors['price']) ? 'is-invalid' : '' ?>"
                                    value="<?= htmlspecialchars($old['price'] ?? '') ?>"
                                    placeholder="125000" required>
